@@ -1370,9 +1370,13 @@ body.menu-open{overflow:hidden}
   function ensureRevealed(target){
     if(typeof ScrollTrigger === "undefined" || !target) return;
     ScrollTrigger.getAll().forEach(st=>{
-      if(st.scrub) return;                                  // don't touch scrubbed/pinned timelines
+      // Leave scroll-scrubbed / pinned effects alone (hero shrink, desktop "How it works" pin)
+      if(st.vars && (st.vars.scrub || st.vars.pin)) return;
       const trg = st.trigger;
-      if(trg && target.contains(trg) && st.animation) st.animation.progress(1);
+      if(trg && st.animation && target.contains(trg)){
+        st.animation.progress(1);   // snap the reveal to its finished (visible) state
+        st.kill(false);             // detach from ScrollTrigger so nothing can reset/reverse it
+      }
     });
   }
   function scrollToSection(id){
