@@ -713,7 +713,7 @@ body.menu-open{overflow:hidden}
   background:radial-gradient(900px 480px at 85% 0%,rgba(15,169,88,.07),transparent 60%),#fff}
 
 @media(max-width:640px){
-  .hero-video{height:calc(100vh + 360px)}
+  /* .hero-video height is set to auto in the hero-video mobile block below */
   .pip{width:172px;right:14px;bottom:14px}
   .pip video{height:98px}
 }
@@ -793,12 +793,21 @@ body.menu-open{overflow:hidden}
   .phones{height:400px;transform:scale(.82);transform-origin:top center}
   .hero{padding-top:110px}
   .header-cta{display:none}
-  /* Hero video: fit all copy inside the 100vh stage with safe top/bottom padding */
-  .hv-content{
-    justify-content:flex-end;
-    padding:96px 20px calc(40px + env(safe-area-inset-bottom));
+  /* Hero video on phones: the stage GROWS to fit its copy (no pin/clip crop),
+     so every line — headline, buttons and meta — is always fully visible. */
+  .hero-video{height:auto}
+  .hv-sticky{height:auto;display:block}
+  .hv-media{
+    width:100%;height:auto;
+    min-height:100vh;min-height:100svh;   /* fills the screen, grows if the copy is taller */
   }
-  .hv-content h1{font-size:clamp(30px,9vw,42px);line-height:1.08}
+  .hv-content{
+    height:auto;box-sizing:border-box;
+    min-height:100vh;min-height:100svh;
+    justify-content:center;
+    padding:124px 20px calc(56px + env(safe-area-inset-bottom));
+  }
+  .hv-content h1{font-size:clamp(29px,8.4vw,40px);line-height:1.1}
   .hv-content .lead{font-size:14px;line-height:1.55;margin:16px 0 22px}
   .hv-content .hero-meta{margin-top:20px;font-size:12px;row-gap:2px}
   .hero-actions{gap:10px}
@@ -1559,23 +1568,29 @@ body.menu-open{overflow:hidden}
   })();
 
   /* Immersive → card: the full-bleed hero shrinks into a centred floating card over the
-     first ~460px of scroll. 100vw→min(90vw,1500px), 100vh→75vh, radius 0→32, margin-top 0→60. */
-  gsap.timeline({
-    scrollTrigger:{ trigger:"#heroVideo", start:"top top", end:"bottom bottom", scrub:true, invalidateOnRefresh:true,
-                    pin:".hv-sticky", pinSpacing:false, anticipatePin:1 }   // pin replaces the old position:sticky
-  })
-  // GPU-only shrink: clip a centred rounded card out of the full-bleed video (no width/height = no reflow).
-  .fromTo("#hvMedia",
-    { clipPath:"inset(0px 0px 0px 0px round 0px)", filter:"drop-shadow(0 0px 0px rgba(6,15,10,0))" },
-    { clipPath:()=>{
-        const w = window.innerWidth, h = window.innerHeight;
-        const cardW = Math.min(w * 0.9, 1500), sx = Math.max(0, (w - cardW) / 2);
-        const top = 60, bottom = Math.max(0, h - 60 - h * 0.75);   // 75vh card, 60px from the top
-        return `inset(${top}px ${sx}px ${bottom}px ${sx}px round 32px)`;
-      },
-      filter:"drop-shadow(0 18px 30px rgba(6,15,10,.26))", ease:"none" }, 0)   // smaller blur = far cheaper per scroll frame
-  .fromTo("#hvVideo", { scale:1 }, { scale:1.06, ease:"none" }, 0)   // subtle push-in = depth as it docks into a card
-  .to(".hv-scrollcue", { autoAlpha:0, ease:"none" }, 0);
+     first ~460px of scroll. 100vw→min(90vw,1500px), 100vh→75vh, radius 0→32, margin-top 0→60.
+     DESKTOP/TABLET ONLY — on phones the copy is taller than 100vh, so we skip the pin+clip
+     crop entirely and let the stage grow to fit (see the max-width:640px CSS). matchMedia
+     also tears this down cleanly if the viewport is resized across the breakpoint. */
+  gsap.matchMedia().add("(min-width: 641px)", () => {
+    const heroTl = gsap.timeline({
+      scrollTrigger:{ trigger:"#heroVideo", start:"top top", end:"bottom bottom", scrub:true, invalidateOnRefresh:true,
+                      pin:".hv-sticky", pinSpacing:false, anticipatePin:1 }   // pin replaces the old position:sticky
+    })
+    // GPU-only shrink: clip a centred rounded card out of the full-bleed video (no width/height = no reflow).
+    .fromTo("#hvMedia",
+      { clipPath:"inset(0px 0px 0px 0px round 0px)", filter:"drop-shadow(0 0px 0px rgba(6,15,10,0))" },
+      { clipPath:()=>{
+          const w = window.innerWidth, h = window.innerHeight;
+          const cardW = Math.min(w * 0.9, 1500), sx = Math.max(0, (w - cardW) / 2);
+          const top = 60, bottom = Math.max(0, h - 60 - h * 0.75);   // 75vh card, 60px from the top
+          return `inset(${top}px ${sx}px ${bottom}px ${sx}px round 32px)`;
+        },
+        filter:"drop-shadow(0 18px 30px rgba(6,15,10,.26))", ease:"none" }, 0)   // smaller blur = far cheaper per scroll frame
+    .fromTo("#hvVideo", { scale:1 }, { scale:1.06, ease:"none" }, 0)   // subtle push-in = depth as it docks into a card
+    .to(".hv-scrollcue", { autoAlpha:0, ease:"none" }, 0);
+    return () => heroTl.scrollTrigger && heroTl.scrollTrigger.kill();
+  });
 
   /* Mini player appears once the film has left the viewport */
   ScrollTrigger.create({
