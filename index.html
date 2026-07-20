@@ -139,6 +139,44 @@ h3{font-size:17px;font-weight:700;letter-spacing:-0.01em}
 }
 .lang-chip:hover{border-color:var(--green);transform:translateY(-1px)}
 .header-cta{padding:11px 20px;font-size:13.5px}
+/* ---- Mobile menu ---- */
+.nav-toggle{
+  display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;
+  background:#fff;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  cursor:pointer;flex:none;transition:border-color .3s,box-shadow .3s;
+}
+.nav-toggle:hover{border-color:var(--green)}
+.nav-toggle .nt-bar{
+  width:19px;height:2px;border-radius:2px;background:var(--ink);
+  transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .25s ease;
+}
+.nav-toggle.open .nt-bar:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle.open .nt-bar:nth-child(2){opacity:0}
+.nav-toggle.open .nt-bar:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{position:fixed;inset:0;z-index:99;visibility:hidden;pointer-events:none}
+.mobile-menu.open{visibility:visible;pointer-events:auto}
+.mm-backdrop{
+  position:absolute;inset:0;background:rgba(15,27,20,.5);
+  opacity:0;transition:opacity .35s ease;
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+}
+.mobile-menu.open .mm-backdrop{opacity:1}
+.mm-panel{
+  position:absolute;top:0;right:0;height:100%;width:min(82vw,340px);
+  background:#fff;box-shadow:-12px 0 40px rgba(15,27,20,.16);
+  display:flex;flex-direction:column;gap:4px;
+  padding:96px 24px calc(28px + env(safe-area-inset-bottom));
+  transform:translateX(100%);transition:transform .4s cubic-bezier(.22,1,.36,1);
+  overflow-y:auto;
+}
+.mobile-menu.open .mm-panel{transform:translateX(0)}
+.mm-link{
+  font-size:17px;font-weight:600;color:var(--ink);padding:15px 4px;
+  border-bottom:1px solid var(--line);transition:color .2s,padding-left .25s;
+}
+.mm-link:hover,.mm-link:active{color:var(--green);padding-left:10px}
+.mm-cta{margin-top:22px;justify-content:center;width:100%;padding:14px}
+body.menu-open{overflow:hidden}
 
 /* ============================================================
    Hero
@@ -743,6 +781,7 @@ h3{font-size:17px;font-weight:700;letter-spacing:-0.01em}
   .why-grid{grid-template-columns:1fr}
   .cta-band{grid-template-columns:1fr;padding:48px 36px}
   .nav{display:none}
+  .nav-toggle{display:flex}
 }
 @media(max-width:640px){
   .container{padding:0 20px}
@@ -789,9 +828,24 @@ h3{font-size:17px;font-weight:700;letter-spacing:-0.01em}
     </nav>
     <div class="header-right">
       <a href="#cta" class="btn btn-primary header-cta">List your business</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span class="nt-bar"></span><span class="nt-bar"></span><span class="nt-bar"></span>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- ================= Mobile menu (drawer) ================= -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mm-backdrop" id="mmBackdrop"></div>
+  <nav class="mm-panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <a class="mm-link" href="#why">Why DealPopup</a>
+    <a class="mm-link" href="#how">How it works</a>
+    <a class="mm-link" href="#tools">Merchant tools</a>
+    <a class="mm-link" href="#faq">FAQ</a>
+    <a class="btn btn-primary mm-cta" href="#cta">List your business <span class="arrow">→</span></a>
+  </nav>
+</div>
 <!-- Floating mini player (fixed — kept OUTSIDE #smooth-content so ScrollSmoother's transform doesn't break it) -->
 <div class="pip" id="pip" role="button" aria-label="Back to the film">
   <video muted loop playsinline preload="metadata" disablePictureInPicture disableRemotePlayback
@@ -1282,6 +1336,24 @@ h3{font-size:17px;font-weight:700;letter-spacing:-0.01em}
   };
   setHeader();
   window.addEventListener("scroll", setHeader, { passive: true });
+
+  /* ---------- Mobile menu ---------- */
+  const navToggle = document.getElementById("navToggle");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const mmBackdrop = document.getElementById("mmBackdrop");
+  const setMenu = (open) => {
+    mobileMenu.classList.toggle("open", open);
+    navToggle.classList.toggle("open", open);
+    document.body.classList.toggle("menu-open", open);
+    navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    mobileMenu.setAttribute("aria-hidden", open ? "false" : "true");
+    navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  };
+  navToggle.addEventListener("click", () => setMenu(!mobileMenu.classList.contains("open")));
+  mmBackdrop.addEventListener("click", () => setMenu(false));
+  mobileMenu.querySelectorAll(".mm-link, .mm-cta").forEach(a =>
+    a.addEventListener("click", () => setMenu(false)));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
 
   /* ---------- Mini player (PiP) ---------- */
   const pip = document.getElementById("pip");
