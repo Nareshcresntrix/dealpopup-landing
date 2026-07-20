@@ -1687,7 +1687,7 @@ h3{font-size:17px;font-weight:700;letter-spacing:-0.01em}
     document.querySelectorAll(".faq-item").forEach(item=>{
       const q = item.querySelector(".faq-q");
       const a = item.querySelector(".faq-a");
-      q.addEventListener("click", ()=>{
+      q.addEventListener("click", ()=>{ 
         const open = item.classList.contains("open");
         // Close others for a tidy, focused reading experience
         document.querySelectorAll(".faq-item.open").forEach(o=>{
