@@ -55,6 +55,7 @@ body{
   line-height:1.6;
 }
 img{max-width:100%;display:block}
+.aed-icon{width:.95em;height:.83em;fill:currentColor;vertical-align:-.05em;margin-right:.12em}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 .container{max-width:var(--container);margin:0 auto;padding:0 32px}
@@ -501,7 +502,14 @@ body.menu-open{overflow:hidden}
 .cta-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .cta-whats{color:#fff;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:8px;opacity:.95}
 .cta-whats:hover{text-decoration:underline}
-.cta-checks{display:flex;flex-wrap:wrap;gap:20px;margin-top:30px;font-size:13px}
+.cta-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.cta-badges span{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.26);
+  border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:500;color:#fff;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.cta-checks{display:flex;flex-wrap:wrap;gap:20px;margin-top:24px;font-size:13px}
 .cta-checks span{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.92)}
 .cta-checks svg{width:14px;height:14px;color:#9FF0C4}
 .offers-panel{
@@ -569,6 +577,22 @@ body.menu-open{overflow:hidden}
 .footer li{margin-bottom:11px}
 .footer li a{font-size:13.5px;transition:color .25s}
 .footer li a:hover{color:#fff}
+/* Get-the-app store badges */
+.app-cta{margin-top:24px}
+.app-cta h5{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#93A2AE;margin-bottom:12px}
+.app-badges{display:flex;flex-direction:column;gap:10px;max-width:210px}
+.app-badge{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.22);border-radius:11px;
+  padding:9px 15px;color:#fff;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:border-color .3s,transform .3s,background .3s;
+}
+.app-badge:hover{border-color:rgba(255,255,255,.5);transform:translateY(-2px);background:rgba(255,255,255,.12)}
+.app-badge svg{width:24px;height:24px;flex:none}
+.app-badge .bt{display:flex;flex-direction:column;line-height:1.15}
+.app-badge .bt small{font-size:9px;letter-spacing:.03em;color:rgba(255,255,255,.72)}
+.app-badge .bt b{font-size:15px;font-weight:600;color:#fff}
 .footer-bottom{
   border-top:1px solid rgba(255,255,255,.08);padding:22px 0;
   display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
@@ -820,6 +844,13 @@ body.menu-open{overflow:hidden}
 </head>
 <body>
 
+<!-- ================= UAE Dirham symbol (defined once, referenced via <use> wherever a price appears) ================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="aed" viewBox="0 0 1000 870">
+    <path d="m88.3 1c0.4 0.6 2.6 3.3 4.7 5.9 15.3 18.2 26.8 47.8 33 85.1 4.1 24.5 4.3 32.2 4.3 125.6v87h-41.8c-38.2 0-42.6-0.2-50.1-1.7-11.8-2.5-24-9.2-32.2-17.8-6.5-6.9-6.3-7.3-5.9 13.6 0.5 17.3 0.7 19.2 3.2 28.6 4 14.9 9.5 26 17.8 35.9 11.3 13.6 22.8 21.2 39.2 26.3 3.5 1 10.9 1.4 37.1 1.6l32.7 0.5v43.3 43.4l-46.1-0.3-46.3-0.3-8-3.2c-9.5-3.8-13.8-6.6-23.1-14.9l-6.8-6.1 0.4 19.1c0.5 17.7 0.6 19.7 3.1 28.7 8.7 31.8 29.7 54.5 57.4 61.9 6.9 1.9 9.6 2 38.5 2.4l30.9 0.4v89.6c0 54.1-0.3 94-0.8 100.8-0.5 6.2-2.1 17.8-3.5 25.9-6.5 37.3-18.2 65.4-35 83.6l-3.4 3.7h169.1c101.1 0 176.7-0.4 187.8-0.9 19.5-1 63-5.3 72.8-7.4 3.1-0.6 8.9-1.5 12.7-2.1 8.1-1.2 21.5-4 40.8-8.9 27.2-6.8 52-15.3 76.3-26.1 7.6-3.4 29.4-14.5 35.2-18 3.1-1.8 6.8-4 8.2-4.7 3.9-2.1 10.4-6.3 19.9-13.1 4.7-3.4 9.4-6.7 10.4-7.4 4.2-2.8 18.7-14.9 25.3-21 25.1-23.1 46.1-48.8 62.4-76.3 2.3-4 5.3-9 6.6-11.1 3.3-5.6 16.9-33.6 18.2-37.8 0.6-1.9 1.4-3.9 1.8-4.3 2.6-3.4 17.6-50.6 19.4-60.9 0.6-3.3 0.9-3.8 3.4-4.3 1.6-0.3 24.9-0.3 51.8-0.1 53.8 0.4 53.8 0.4 65.7 5.9 6.7 3.1 8.7 4.5 16.1 11.2 9.7 8.7 8.8 10.1 8.2-11.7-0.4-12.8-0.9-20.7-1.8-23.9-3.4-12.3-4.2-14.9-7.2-21.1-9.8-21.4-26.2-36.7-47.2-44l-8.2-3-33.4-0.4-33.3-0.5 0.4-11.7c0.4-15.4 0.4-45.9-0.1-61.6l-0.4-12.6 44.6-0.2c38.2-0.2 45.3 0 49.5 1.1 12.6 3.5 21.1 8.3 31.5 17.8l5.8 5.4v-14.8c0-17.6-0.9-25.4-4.5-37-7.1-23.5-21.1-41-41.1-51.8-13-7-13.8-7.2-58.5-7.5-26.2-0.2-39.9-0.6-40.6-1.2-0.6-0.6-1.1-1.6-1.1-2.4 0-0.8-1.5-7.1-3.5-13.9-23.4-82.7-67.1-148.4-131-197.1-8.7-6.7-30-20.8-38.6-25.6-3.3-1.9-6.9-3.9-7.8-4.5-4.2-2.3-28.3-14.1-34.3-16.6-3.6-1.6-8.3-3.6-10.4-4.4-35.3-15.3-94.5-29.8-139.7-34.3-7.4-0.7-17.2-1.8-21.7-2.2-20.4-2.3-48.7-2.6-209.4-2.6-135.8 0-169.9 0.3-169.4 1zm330.7 43.3c33.8 2 54.6 4.6 78.9 10.5 74.2 17.6 126.4 54.8 164.3 117 3.5 5.8 18.3 36 20.5 42.1 10.5 28.3 15.6 45.1 20.1 67.3 1.1 5.4 2.6 12.6 3.3 16 0.7 3.3 1 6.4 0.7 6.7-0.5 0.4-100.9 0.6-223.3 0.5l-222.5-0.2-0.3-128.5c-0.1-70.6 0-129.3 0.3-130.4l0.4-1.9h71.1c39 0 78 0.4 86.5 0.9zm297.5 350.3c0.7 4.3 0.7 77.3 0 80.9l-0.6 2.7-227.5-0.2-227.4-0.3-0.2-42.4c-0.2-23.3 0-42.7 0.2-43.1 0.3-0.5 97.2-0.8 227.7-0.8h227.2zm-10.2 171.7c0.5 1.5-1.9 13.8-6.8 33.8-5.6 22.5-13.2 45.2-20.9 62-3.8 8.6-13.3 27.2-15.6 30.7-1.1 1.6-4.3 6.7-7.1 11.2-18 28.2-43.7 53.9-73 72.9-10.7 6.8-32.7 18.4-38.6 20.2-1.2 0.3-2.5 0.9-3 1.3-0.7 0.6-9.8 4-20.4 7.8-19.5 6.9-56.6 14.4-86.4 17.5-19.3 1.9-22.4 2-96.7 2h-76.9v-129.7-129.8l220.9-0.4c121.5-0.2 221.6-0.5 222.4-0.7 0.9-0.1 1.8 0.5 2.1 1.2z"/>
+  </symbol>
+</svg>
+
 <!-- ================= Splash backdrop (plain white cover — the logo itself is the header logo) ================= -->
 <div id="splashBg" aria-hidden="true"></div>
 
@@ -1020,7 +1051,7 @@ body.menu-open{overflow:hidden}
         <span class="ico-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
         <span class="num">2</span>
         <h3>Publish your offers</h3>
-        <p>Deals, coupon codes or full weekly catalogs. Set prices in AED, pick your emirates, choose start and end dates.</p>
+        <p>Deals, coupon codes or full weekly catalogs. Set prices in <svg class="aed-icon" aria-label="dirham"><use href="#aed"/></svg>, pick your emirates, choose start and end dates.</p>
       </div>
       <div class="step" data-step>
         <span class="ico-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21 12 16 5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span>
@@ -1083,13 +1114,13 @@ body.menu-open{overflow:hidden}
         </div>
         <div class="demo">
           <div class="emirate-pills">
-            <span class="epill on">Dubai</span>
             <span class="epill on">Abu Dhabi</span>
+            <span class="epill on">Dubai</span>
             <span class="epill">Sharjah</span>
             <span class="epill">Ajman</span>
-            <span class="epill on g">RAK</span>
+            <span class="epill on g">Ras Al Khaimah</span>
             <span class="epill">Fujairah</span>
-            <span class="epill">UAQ</span>
+            <span class="epill">Umm Al Quwain</span>
           </div>
         </div>
       </div>
@@ -1119,7 +1150,7 @@ body.menu-open{overflow:hidden}
       <div class="aud-stat will-reveal" data-card><div class="big"><span class="g">7</span>/7</div><p>emirates covered at launch</p></div>
       <div class="aud-stat will-reveal" data-card><div class="big">3</div><p>offer formats: deals, coupons, catalogs</p></div>
       <div class="aud-stat will-reveal" data-card><div class="big"><span data-count="40">0</span>+</div><p>shopping categories</p></div>
-      <div class="aud-stat will-reveal" data-card><div class="big green">AED 0</div><p>listing fees for founding merchants</p></div>
+      <div class="aud-stat will-reveal" data-card><div class="big green"><svg class="aed-icon" aria-label="dirham"><use href="#aed"/></svg>0</div><p>listing fees for founding merchants</p></div>
     </div>
   </div>
 </section>
@@ -1166,9 +1197,11 @@ body.menu-open{overflow:hidden}
         <span class="chip">⚡ Launching UAE-wide · August 2026</span>
         <h2>Be on the shelf on day one</h2>
         <p class="lead">We're onboarding a limited group of founding merchants before public launch. Spots are capped per category, and the list closes when the cohort is full.</p>
-        <div class="cta-actions">
-          <a href="#" class="btn btn-white">Claim a founding spot <span class="arrow">→</span></a>
-          <a href="#" class="cta-whats">💬 or message us on WhatsApp</a>
+        <div class="cta-badges">
+          <span>🎟️ One unique code per customer</span>
+          <span>⏳ Live codes-remaining counter</span>
+          <span>🔔 Auto sold-out &amp; restock alerts</span>
+          <span>🔒 AES-256 encrypted codes</span>
         </div>
         <div class="cta-checks">
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m4 12 5 5L20 6"/></svg> Homepage placement at launch</span>
@@ -1205,9 +1238,9 @@ body.menu-open{overflow:hidden}
 <section class="section section-soft" id="faq" style="padding-top:70px">
   <div class="container faq-grid">
     <div class="faq-left">
-      <div class="eyebrow will-reveal" data-fade>QUESTIONS1</div>
+      <div class="eyebrow will-reveal" data-fade>QUESTIONS</div>
       <h2 class="split">What merchants ask us</h2>
-      <p class="will-reveal" data-fade>Anything else? Write to <a href="mailto:merchants@dealpopup.com">merchants@dealpopup.com</a> and a human replies within one working day.</p>
+      <p class="will-reveal" data-fade>Still have a question? <a href="https://dealpopup.dev/en/contact" target="_blank" rel="noopener noreferrer">Get in touch</a> and a human replies within one working day.</p>
     </div>
     <div class="faq-list">
       <div class="faq-item will-reveal" data-fade>
@@ -1248,6 +1281,24 @@ body.menu-open{overflow:hidden}
           <svg class="sp-wordmark" viewBox="0 0 115 21" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:20px"><g clip-path="url(#dpFa)"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M0 14.5545V0.937223H7.1671C9.70305 0.937223 11.7521 1.62629 13.3142 3.00457C14.8762 4.36442 15.6572 6.20217 15.6572 8.51767C15.6572 10.8332 14.8762 12.6801 13.3142 14.0583C11.7521 15.4182 9.70305 16.0981 7.1671 16.0981H1.54362C1.12098 16.0981 0.753461 15.9512 0.441054 15.6572C0.147065 15.3447 0 14.9771 0 14.5545ZM4.30017 12.6801H7.00161C8.30636 12.6801 9.34467 12.3125 10.1165 11.5775C10.9067 10.824 11.3018 9.80414 11.3018 8.51767C11.3018 7.21293 10.9067 6.19304 10.1165 5.45785C9.34467 4.72281 8.30636 4.35529 7.00161 4.35529H1.24049L4.30017 6.00928V12.6801ZM28.8472 10.2268C28.8472 10.2819 28.8287 10.6219 28.792 11.2467H20.2467C20.3018 11.412 20.3662 11.5682 20.4396 11.7153C20.9175 12.6709 21.8178 13.1487 23.141 13.1487C24.1518 13.1487 25.0523 12.8087 25.8424 12.1288L27.3861 13.7275C27.57 13.9113 27.6526 14.141 27.6342 14.4167C27.6158 14.674 27.4964 14.8853 27.2758 15.0507C26.21 15.8777 24.7859 16.2912 23.0032 16.2912C20.945 16.2912 19.2819 15.7215 18.0138 14.5821C16.7458 13.4427 16.1118 11.9817 16.1118 10.1992C16.1118 8.435 16.7182 6.98319 17.9312 5.84379C19.1624 4.70439 20.7061 4.13483 22.5622 4.13483C24.3631 4.13483 25.8609 4.68611 27.0554 5.78868C28.2499 6.87297 28.8472 8.35233 28.8472 10.2268ZM20.3293 8.54523C20.2408 8.79339 20.2491 9.09651 20.2491 9.09651H24.9879C24.8777 8.4717 24.6112 7.98481 24.1886 7.63557C23.7658 7.26804 23.233 7.08428 22.5897 7.08428C21.4872 7.08428 20.7337 7.57131 20.3293 8.54523ZM34.8289 4.13483C38.8351 4.13483 40.8381 5.94488 40.8381 9.56512V16.0981H37.9712C37.6957 16.0981 37.4659 16.0063 37.2822 15.8226C37.0984 15.6204 37.0064 15.3815 37.0064 15.1058V14.5821C36.4 15.7215 35.2422 16.2912 33.5333 16.2912C32.155 16.2912 31.0798 15.9512 30.3081 15.2713C29.5362 14.5913 29.1503 13.7184 29.1503 12.6525C29.1503 11.5315 29.5731 10.6678 30.4183 10.0613C31.282 9.4549 32.596 9.15163 34.3603 9.15163H36.5959C36.5959 9.15163 36.6114 8.60035 36.5929 8.54523C36.3174 7.69996 35.5271 7.27718 34.2223 7.27718C33.5424 7.27718 32.8625 7.40583 32.1825 7.66312C31.8333 7.81019 31.4842 7.81933 31.1351 7.69068C30.8043 7.56203 30.5561 7.3323 30.3908 7.00161L29.6464 5.51311C30.3081 5.07205 31.0983 4.73209 32.0171 4.49307C32.9544 4.2542 33.8916 4.13483 34.8289 4.13483ZM34.6909 13.6724C35.7201 13.6724 36.3909 13.2222 36.7033 12.3217V11.3018H34.9391C33.7446 11.3018 33.1473 11.6969 33.1473 12.4872C33.1473 12.8363 33.276 13.1211 33.5333 13.3416C33.8088 13.5622 34.1948 13.6724 34.6909 13.6724ZM41.5481 0H44.5526C44.865 0 45.1223 0.110228 45.3245 0.330684C45.5451 0.551282 45.6553 0.808576 45.6553 1.10256V16.0981H42.5404C42.2648 16.0981 42.0258 16.0063 41.8238 15.8226C41.6399 15.6204 41.5481 15.3815 41.5481 15.1058V0ZM60.0101 0.937223C62.0683 0.937223 63.7039 1.44253 64.9168 2.45328C66.1296 3.44562 66.736 4.80548 66.736 6.533C66.736 8.26038 66.1296 9.62952 64.9168 10.6403C63.7039 11.6326 62.0683 12.1288 60.0101 12.1288H57.3638V14.5545C57.3638 14.9771 57.2076 15.3447 56.8951 15.6572C56.6012 15.9512 56.2336 16.0981 55.7926 16.0981H53.0636V0.937223H60.0101ZM59.7344 8.73827C60.6165 8.73827 61.2781 8.55437 61.7192 8.18685C62.1785 7.80105 62.4083 7.24963 62.4083 6.533C62.4083 5.81623 62.1785 5.26495 61.7192 4.87901C61.2781 4.49307 60.6165 4.30017 59.7344 4.30017H54.6348L57.3638 5.43029V8.73827H59.7344ZM106.155 4.32773V14.8027C106.155 15.1518 106.026 15.455 105.769 15.7123C105.512 15.9696 105.208 16.0981 104.859 16.0981H102.213L103.591 13.0936C102.819 14.233 102.011 15.0507 101.165 15.5468C100.32 16.043 99.5114 16.2912 98.7396 16.2912C97.2143 16.2912 96.0014 15.841 95.101 14.9404C94.2004 14.0399 93.7503 12.6985 93.7503 10.9158V4.35529H96.7824C97.0948 4.35529 97.3521 4.45638 97.5543 4.65856C97.7564 4.86059 97.8575 5.11789 97.8575 5.43029V10.2268C97.8575 11.9175 98.5099 12.7627 99.8146 12.7627C100.476 12.7627 101.009 12.5423 101.414 12.1012C101.818 11.6417 102.02 10.9434 102.02 10.0062V5.73356C102.02 5.34762 102.158 5.0168 102.433 4.74123C102.709 4.46552 103.04 4.32773 103.426 4.32773H106.155ZM114.176 4.13483C115.811 4.13483 117.181 4.69525 118.283 5.81623C119.386 6.91894 119.937 8.38903 119.937 10.2268C119.937 12.0461 119.386 13.5162 118.283 14.6372C117.181 15.7399 115.811 16.2912 114.176 16.2912C112.798 16.2912 111.704 15.8777 110.896 15.0507V19.1579C110.896 19.4704 110.785 19.7368 110.565 19.9574C110.344 20.1778 110.078 20.2882 109.765 20.2882H106.788V5.70601C106.788 5.33848 106.917 5.02608 107.174 4.76878C107.45 4.49307 107.781 4.35529 108.167 4.35529H110.703L108.69 7.19451C110.51 5.15472 112.338 4.13483 114.176 4.13483ZM111.53 12.2666C112.007 12.7627 112.605 13.0109 113.321 13.0109C114.038 13.0109 114.626 12.7627 115.085 12.2666C115.545 11.7704 115.775 11.0905 115.775 10.2268C115.775 9.36309 115.545 8.68301 115.085 8.18685C114.626 7.6724 114.038 7.41511 113.321 7.41511C112.605 7.41511 112.007 7.6724 111.53 8.18685C111.07 8.68301 110.84 9.36309 110.84 10.2268C110.84 11.0905 111.07 11.7704 111.53 12.2666ZM79.9976 11.2639C79.8176 12.6427 79.2119 13.8023 78.1803 14.7428C76.9491 15.8822 75.3686 16.4519 73.439 16.4519C71.5095 16.4519 69.9199 15.8822 68.6703 14.7428C67.4206 13.5852 66.7958 12.1242 66.7958 10.36C66.7958 8.59578 67.4206 7.14397 68.6703 6.00471C69.9199 4.86531 71.5095 4.2956 73.439 4.2956C75.3686 4.2956 76.9491 4.86531 78.1803 6.00471C79.2109 6.94421 79.8164 8.09632 79.9972 9.46089C80.0356 9.75103 80.0547 10.0507 80.0547 10.36C80.0547 10.6711 80.0357 10.9724 79.9976 11.2639ZM73.439 13.1717C74.1557 13.1717 74.7438 12.9235 75.2033 12.4273C75.6626 11.9312 75.8923 11.2421 75.8923 10.36C75.8923 9.4963 75.6626 8.81637 75.2033 8.32021C74.7438 7.8239 74.1557 7.57588 73.439 7.57588C72.7223 7.57588 72.125 7.8239 71.6473 8.32021C71.1878 8.81637 70.9582 9.4963 70.9582 10.36C70.9582 11.2237 71.1878 11.9129 71.6473 12.4273C72.125 12.9235 72.7223 13.1717 73.439 13.1717ZM80.352 8.08347C80.2693 7.84617 80.1725 7.61586 80.0617 7.39255C79.9833 7.23806 79.9425 7.06715 79.9425 6.89381C79.9395 6.18647 79.9395 4.30988 79.9395 4.30988C79.9395 3.94236 80.0681 3.62995 80.3254 3.37266C80.6011 3.09709 80.9318 2.95916 81.3178 2.95916H83.8539L83.8594 4.52934L83.6308 4.84931C84.4811 4.51035 85.4325 4.34087 86.4849 4.34087C86.5392 4.34087 86.593 4.34129 86.6467 4.34229C88.503 4.37328 90.0295 4.94255 91.2262 6.04997C92.2566 6.98947 92.8623 8.14144 93.043 9.50573C93.0732 9.78972 93.0883 10.0836 93.0883 10.3876C93.0883 10.8088 93.0588 11.2113 92.9996 11.5952C92.7768 12.8491 92.1856 13.9134 91.2262 14.7882C90.7604 15.2192 90.2447 15.5687 89.679 15.8367C88.9939 16.1612 88.2354 16.3661 87.4037 16.4515C87.1067 16.4821 86.8005 16.4972 86.4849 16.4972C85.604 16.4972 84.7937 16.3785 84.0545 16.141C84.0468 17.3526 84.0468 19.3187 84.0468 19.3187C84.0468 19.6311 83.9365 19.8977 83.7159 20.1182C83.4955 20.3388 83.2291 20.449 82.9166 20.449H79.9395V13.8486C79.9395 13.6754 79.9803 13.5046 80.0584 13.35C80.1714 13.123 80.2698 12.8885 80.3536 12.6465C80.5962 11.9467 80.7174 11.1846 80.7174 10.36C80.7174 9.54028 80.5953 8.78154 80.352 8.08347ZM86.5272 7.57631C86.509 7.57602 86.4908 7.57588 86.4725 7.57588C85.7559 7.57588 85.1586 7.83318 84.6807 8.34776C84.2214 8.84393 83.9917 9.52386 83.9917 10.3876C83.9917 10.926 84.0809 11.393 84.2594 11.7885C84.3689 12.0434 84.5134 12.2714 84.6931 12.4727C85.171 12.9689 85.7683 13.2169 86.4849 13.2169C86.8917 13.2169 87.2571 13.1371 87.5811 12.9772C87.867 12.8533 88.1223 12.6699 88.3469 12.4273C88.8064 11.9312 89.0362 11.2421 89.0362 10.36C89.0362 9.4963 88.8064 8.81637 88.3469 8.32021C87.8876 7.8239 87.2995 7.57588 86.5829 7.57588C86.5642 7.57588 86.5456 7.57602 86.5272 7.57631Z"/></g><g clip-path="url(#dpFb)"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M-6.01318 14.5545V0.937223H1.15391C3.68987 0.937223 5.73894 1.62629 7.30097 3.00457C8.86301 4.36442 9.64403 6.20217 9.64403 8.51767C9.64403 10.8332 8.86301 12.6801 7.30097 14.0583C5.73894 15.4182 3.68987 16.0981 1.15391 16.0981H-4.46956C-4.8922 16.0981 -5.25972 15.9512 -5.57213 15.6572C-5.86612 15.3447 -6.01318 14.9771 -6.01318 14.5545ZM-1.71301 12.6801H0.98843C2.29317 12.6801 3.33148 12.3125 4.10337 11.5775C4.89352 10.824 5.2886 9.80414 5.2886 8.51767C5.2886 7.21293 4.89352 6.19304 4.10337 5.45785C3.33148 4.72281 2.29317 4.35529 0.98843 4.35529H-4.77269L-1.71301 6.00928V12.6801ZM22.834 10.2268C22.834 10.2819 22.8155 10.6219 22.7789 11.2467H14.2335C14.2886 11.412 14.353 11.5682 14.4264 11.7153C14.9043 12.6709 15.8047 13.1487 17.1278 13.1487C18.1386 13.1487 19.0391 12.8087 19.8293 12.1288L21.3729 13.7275C21.5568 13.9113 21.6395 14.141 21.621 14.4167C21.6026 14.674 21.4832 14.8853 21.2627 15.0507C20.1968 15.8777 18.7727 16.2912 16.99 16.2912C14.9318 16.2912 13.2687 15.7215 12.0007 14.5821C10.7326 13.4427 10.0986 11.9817 10.0986 10.1992C10.0986 8.435 10.705 6.98319 11.918 5.84379C13.1492 4.70439 14.693 4.13483 16.549 4.13483C18.3499 4.13483 19.8477 4.68611 21.0422 5.78868C22.2367 6.87297 22.834 8.35233 22.834 10.2268ZM14.3162 8.54523C14.2276 8.79339 14.2359 9.09651 14.2359 9.09651H18.9747C18.8645 8.4717 18.598 7.98481 18.1754 7.63557C17.7526 7.26804 17.2198 7.08428 16.5765 7.08428C15.474 7.08428 14.7205 7.57131 14.3162 8.54523ZM28.8157 4.13483C32.8219 4.13483 34.825 5.94488 34.825 9.56512V16.0981H31.958C31.6825 16.0981 31.4527 16.0063 31.269 15.8226C31.0852 15.6204 30.9933 15.3815 30.9933 15.1058V14.5821C30.3869 15.7215 29.229 16.2912 27.5201 16.2912C26.1418 16.2912 25.0667 15.9512 24.2949 15.2713C23.523 14.5913 23.1371 13.7184 23.1371 12.6525C23.1371 11.5315 23.5599 10.6678 24.4051 10.0613C25.2688 9.4549 26.5829 9.15163 28.3471 9.15163H30.5828C30.5828 9.15163 30.5982 8.60035 30.5798 8.54523C30.3042 7.69996 29.5139 7.27718 28.2092 7.27718C27.5292 7.27718 26.8493 7.40583 26.1694 7.66312C25.8201 7.81019 25.471 7.81933 25.1219 7.69068C24.7911 7.56203 24.5429 7.3323 24.3776 7.00161L23.6333 5.51311C24.2949 5.07205 25.0851 4.73209 26.0039 4.49307C26.9412 4.2542 27.8785 4.13483 28.8157 4.13483ZM28.6778 13.6724C29.7069 13.6724 30.3777 13.2222 30.6901 12.3217V11.3018H28.9259C27.7314 11.3018 27.1341 11.6969 27.1341 12.4872C27.1341 12.8363 27.2628 13.1211 27.5201 13.3416C27.7957 13.5622 28.1816 13.6724 28.6778 13.6724ZM35.5349 0H38.5394C38.8519 0 39.1091 0.110228 39.3113 0.330684C39.5319 0.551282 39.6422 0.808576 39.6422 1.10256V16.0981H36.5272C36.2516 16.0981 36.0126 16.0063 35.8106 15.8226C35.6267 15.6204 35.5349 15.3815 35.5349 15.1058V0ZM53.9969 0.937223C56.0551 0.937223 57.6907 1.44253 58.9036 2.45328C60.1164 3.44562 60.7228 4.80548 60.7228 6.533C60.7228 8.26038 60.1164 9.62952 58.9036 10.6403C57.6907 11.6326 56.0551 12.1288 53.9969 12.1288H51.3506V14.5545C51.3506 14.9771 51.1944 15.3447 50.882 15.6572C50.588 15.9512 50.2205 16.0981 49.7794 16.0981H47.0504V0.937223H53.9969ZM53.7212 8.73827C54.6033 8.73827 55.265 8.55437 55.706 8.18685C56.1653 7.80105 56.3951 7.24963 56.3951 6.533C56.3951 5.81623 56.1653 5.26495 55.706 4.87901C55.265 4.49307 54.6033 4.30017 53.7212 4.30017H48.6216L51.3506 5.43029V8.73827H53.7212ZM100.142 4.32773V14.8027C100.142 15.1518 100.013 15.455 99.7556 15.7123C99.4983 15.9696 99.1951 16.0981 98.8459 16.0981H96.1996L97.5779 13.0936C96.8062 14.233 95.9974 15.0507 95.1522 15.5468C94.3068 16.043 93.4982 16.2912 92.7264 16.2912C91.2011 16.2912 89.9882 15.841 89.0878 14.9404C88.1873 14.0399 87.7371 12.6985 87.7371 10.9158V4.35529H90.7692C91.0816 4.35529 91.3389 4.45638 91.5411 4.65856C91.7432 4.86059 91.8443 5.11789 91.8443 5.43029V10.2268C91.8443 11.9175 92.4967 12.7627 93.8015 12.7627C94.463 12.7627 94.996 12.5423 95.4003 12.1012C95.8046 11.6417 96.0067 10.9434 96.0067 10.0062V5.73356C96.0067 5.34762 96.1445 5.0168 96.4202 4.74123C96.6958 4.46552 97.0266 4.32773 97.4126 4.32773H100.142ZM108.163 4.13483C109.798 4.13483 111.167 4.69525 112.27 5.81623C113.373 6.91894 113.924 8.38903 113.924 10.2268C113.924 12.0461 113.373 13.5162 112.27 14.6372C111.167 15.7399 109.798 16.2912 108.163 16.2912C106.785 16.2912 105.691 15.8777 104.882 15.0507V19.1579C104.882 19.4704 104.772 19.7368 104.552 19.9574C104.331 20.1778 104.065 20.2882 103.752 20.2882H100.775V5.70601C100.775 5.33848 100.904 5.02608 101.161 4.76878C101.437 4.49307 101.768 4.35529 102.154 4.35529H104.689L102.677 7.19451C104.497 5.15472 106.325 4.13483 108.163 4.13483ZM105.516 12.2666C105.994 12.7627 106.591 13.0109 107.308 13.0109C108.025 13.0109 108.613 12.7627 109.072 12.2666C109.532 11.7704 109.762 11.0905 109.762 10.2268C109.762 9.36309 109.532 8.68301 109.072 8.18685C108.613 7.6724 108.025 7.41511 107.308 7.41511C106.591 7.41511 105.994 7.6724 105.516 8.18685C105.057 8.68301 104.827 9.36309 104.827 10.2268C104.827 11.0905 105.057 11.7704 105.516 12.2666ZM73.9844 11.2639C73.8044 12.6427 73.1987 13.8023 72.1671 14.7428C70.9359 15.8822 69.3554 16.4519 67.4259 16.4519C65.4963 16.4519 63.9067 15.8822 62.6571 14.7428C61.4074 13.5852 60.7826 12.1242 60.7826 10.36C60.7826 8.59578 61.4074 7.14397 62.6571 6.00471C63.9067 4.86531 65.4963 4.2956 67.4259 4.2956C69.3554 4.2956 70.9359 4.86531 72.1671 6.00471C73.1977 6.94421 73.8032 8.09632 73.984 9.46089C74.0224 9.75103 74.0415 10.0507 74.0415 10.36C74.0415 10.6711 74.0225 10.9724 73.9844 11.2639ZM67.4259 13.1717C68.1425 13.1717 68.7306 12.9235 69.1901 12.4273C69.6494 11.9312 69.8792 11.2421 69.8792 10.36C69.8792 9.4963 69.6494 8.81637 69.1901 8.32021C68.7306 7.8239 68.1425 7.57588 67.4259 7.57588C66.7091 7.57588 66.1118 7.8239 65.6341 8.32021C65.1746 8.81637 64.945 9.4963 64.945 10.36C64.945 11.2237 65.1746 11.9129 65.6341 12.4273C66.1118 12.9235 66.7091 13.1717 67.4259 13.1717ZM74.3388 8.08347C74.2561 7.84617 74.1593 7.61586 74.0485 7.39255C73.9701 7.23806 73.9293 7.06715 73.9293 6.89381C73.9263 6.18647 73.9263 4.30988 73.9263 4.30988C73.9263 3.94236 74.055 3.62995 74.3122 3.37266C74.588 3.09709 74.9186 2.95916 75.3046 2.95916H77.8407L77.8463 4.52934L77.6177 4.84931C78.4679 4.51035 79.4193 4.34087 80.4717 4.34087C80.526 4.34087 80.5798 4.34129 80.6335 4.34229C82.4898 4.37328 84.0163 4.94255 85.213 6.04997C86.2434 6.98947 86.8491 8.14144 87.0299 9.50573C87.06 9.78972 87.0751 10.0836 87.0751 10.3876C87.0751 10.8088 87.0456 11.2113 86.9865 11.5952C86.7636 12.8491 86.1725 13.9134 85.213 14.7882C84.7472 15.2192 84.2315 15.5687 83.6658 15.8367C82.9807 16.1612 82.2222 16.3661 81.3905 16.4515C81.0935 16.4821 80.7873 16.4972 80.4717 16.4972C79.5908 16.4972 78.7805 16.3785 78.0413 16.141C78.0336 17.3526 78.0336 19.3187 78.0336 19.3187C78.0336 19.6311 77.9234 19.8977 77.7028 20.1182C77.4823 20.3388 77.2159 20.449 76.9035 20.449H73.9263V13.8486C73.9263 13.6754 73.9671 13.5046 74.0452 13.35C74.1582 13.123 74.2566 12.8885 74.3404 12.6465C74.583 11.9467 74.7042 11.1846 74.7042 10.36C74.7042 9.54028 74.5821 8.78154 74.3388 8.08347ZM80.514 7.57631C80.4959 7.57602 80.4776 7.57588 80.4593 7.57588C79.7427 7.57588 79.1454 7.83318 78.6675 8.34776C78.2082 8.84393 77.9785 9.52386 77.9785 10.3876C77.9785 10.926 78.0677 11.393 78.2462 11.7885C78.3557 12.0434 78.5002 12.2714 78.68 12.4727C79.1579 12.9689 79.7551 13.2169 80.4717 13.2169C80.8785 13.2169 81.2439 13.1371 81.5679 12.9772C81.8539 12.8533 82.1092 12.6699 82.3338 12.4273C82.7932 11.9312 83.023 11.2421 83.023 10.36C83.023 9.4963 82.7932 8.81637 82.3338 8.32021C81.8744 7.8239 81.2863 7.57588 80.5697 7.57588C80.551 7.57588 80.5324 7.57602 80.514 7.57631Z"/></g><defs><clipPath id="dpFa"><rect width="46.9124" height="20.449" fill="white"/></clipPath><clipPath id="dpFb"><rect width="68.5643" height="20.449" fill="white" transform="translate(45.7095)"/></clipPath></defs></svg>                                                                                                                                                                       
         </a>
         <p>The UAE's deals &amp; coupons platform: deals, coupon codes and store catalogs from merchants across all seven emirates.</p>
+        <div class="app-cta">
+          <h5>Get the app</h5>
+          <div class="app-badges">
+            <a class="app-badge" href="#" aria-label="Download on the App Store">
+              <svg viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+              <span class="bt"><small>Download on the</small><b>App Store</b></span>
+            </a>
+            <a class="app-badge" href="#" aria-label="Get it on Google Play">
+              <svg viewBox="0 0 512 512" aria-hidden="true">
+                <path fill="#00D3FF" d="M47 33.3c-4.2 4.5-6.7 11.4-6.7 20.4v404.6c0 9 2.5 15.9 6.7 20.4l1.4 1.3 226.6-226.6v-5.3L48.4 32z"/>
+                <path fill="#FFCE00" d="M350.5 331.4 275 255.9v-5.3l75.6-75.6 1.7 1 89.5 50.9c25.6 14.5 25.6 38.3 0 52.9l-89.5 50.8z"/>
+                <path fill="#FF3A44" d="M352.2 330.4 275 253.2 47 481.3c8.4 8.9 22.4 10 38.1 1.1z"/>
+                <path fill="#00F076" d="M352.2 176 85.1 24.6C69.4 15.6 55.4 16.8 47 25.7l228 228z"/>
+              </svg>
+              <span class="bt"><small>Get it on</small><b>Google Play</b></span>
+            </a>
+          </div>
+        </div>
       </div>
       <div>
         <h4>For merchants</h4>
@@ -1262,7 +1313,7 @@ body.menu-open{overflow:hidden}
         <h4>DealPopup</h4>
         <ul>
           <li><a href="#">dealpopup.com</a></li>
-          <li><a href="mailto:merchants@dealpopup.com">merchants@dealpopup.com</a></li>
+          <li><a href="https://dealpopup.dev/en/contact" target="_blank" rel="noopener noreferrer">Contact us</a></li>
           <li><a href="#">Advertise with us</a></li>
         </ul>
       </div>
@@ -1364,46 +1415,46 @@ body.menu-open{overflow:hidden}
      positions and scroll on the next frames — otherwise the still-open drawer
      (body overflow:hidden) leaves stale measurements and the target lands on a blank
      area whose reveal animations never fired (the "white screen" bug). */
-  /* Guarantee a section's reveal animations are shown, so jumping to it can never
-     land on opacity:0 content (the white screen). Scroll-scrubbed / pinned effects
-     are left alone — only the play-on-enter reveals are snapped to their end state. */
-  function ensureRevealed(target){
+  /* Replay a section's reveal animations from the start so its text/cards ANIMATE IN when
+     we land on it (instead of popping in fully-formed, or staying at opacity:0 = white screen).
+     Scroll-scrubbed / pinned effects (hero shrink, desktop "How it works" pin) are left alone. */
+  function playReveals(target){
     if(typeof ScrollTrigger === "undefined" || !target) return;
     ScrollTrigger.getAll().forEach(st=>{
-      // Leave scroll-scrubbed / pinned effects alone (hero shrink, desktop "How it works" pin)
       if(st.vars && (st.vars.scrub || st.vars.pin)) return;
       const trg = st.trigger;
       if(trg && st.animation && target.contains(trg)){
-        st.animation.progress(1);   // snap the reveal to its finished (visible) state
-        st.kill(false);             // detach from ScrollTrigger so nothing can reset/reverse it
+        st.animation.play(0);   // rewind to the start and play — the content animates in
       }
     });
   }
   function scrollToSection(id){
     const target = (id && id.length > 1) ? document.querySelector(id) : null;
     if(!target) return;
-    ensureRevealed(target);                                 // content is visible before we even arrive
     if(smoother){
-      smoother.scrollTo(target, !reduceMotion, "top 70px");
+      // Jump straight to the target (no smooth glide). Gliding across the pinned "How it works"
+      // section forces you to watch its 4-card scrub before arriving at Merchant tools / FAQ —
+      // an instant jump lands you directly on the chosen section instead.
+      smoother.scrollTo(target, false, "top 70px");
     } else {
       const y = target.getBoundingClientRect().top + window.pageYOffset - 70;
-      window.scrollTo({ top:y, behavior: reduceMotion ? "auto" : "smooth" });
+      window.scrollTo({ top:y, behavior: "auto" });          // instant, for the same reason
     }
+    playReveals(target);                                     // then animate the section's content in
   }
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
     a.addEventListener("click", e=>{
       const id = a.getAttribute("href");
       if(!id || id.length <= 1 || !document.querySelector(id)) return;  // "#" / off-page links pass through
       e.preventDefault();
-      if(a.closest("#mobileMenu")){
-        setMenu(false);
-        requestAnimationFrame(()=> requestAnimationFrame(()=>{
-          if(typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
-          scrollToSection(id);
-        }));
-      } else {
+      if(a.closest("#mobileMenu")) setMenu(false);           // close the drawer first if it was a menu link
+      // Refresh trigger positions before scrolling for BOTH header and drawer links: the pinned
+      // "How it works" section adds ~2500px, and stale positions make scrollTo to later sections
+      // (Merchant tools / FAQ) miss — the "clicking a header menu does nothing" bug after refresh.
+      requestAnimationFrame(()=> requestAnimationFrame(()=>{
+        if(typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
         scrollToSection(id);
-      }
+      }));
     });
   });
 
