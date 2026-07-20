@@ -754,6 +754,16 @@ h3{font-size:17px;font-weight:700;letter-spacing:-0.01em}
   .phones{height:400px;transform:scale(.82);transform-origin:top center}
   .hero{padding-top:110px}
   .header-cta{display:none}
+  /* Hero video: fit all copy inside the 100vh stage with safe top/bottom padding */
+  .hv-content{
+    justify-content:flex-end;
+    padding:96px 20px calc(40px + env(safe-area-inset-bottom));
+  }
+  .hv-content h1{font-size:clamp(30px,9vw,42px);line-height:1.08}
+  .hv-content .lead{font-size:14px;line-height:1.55;margin:16px 0 22px}
+  .hv-content .hero-meta{margin-top:20px;font-size:12px;row-gap:2px}
+  .hero-actions{gap:10px}
+  .hv-scrollcue{display:none}
 }
 </style>
 </head>
