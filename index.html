@@ -1326,16 +1326,9 @@ body.menu-open{overflow:hidden}
       normalizeScroll: true,     // unified wheel + touch, no mobile address-bar jump
       smoothTouch: false         // native momentum scrolling on phones = smooth, no JS-vs-touch fight
     });
-    // Anchor links glide via the smoother (position clears the fixed header)
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener("click", e=>{
-        const id = a.getAttribute("href");
-        if(id.length > 1 && document.querySelector(id)){
-          e.preventDefault();
-          smoother.scrollTo(id, true, "top 70px");
-        }
-      });
-    });
+    // NOTE: in-page anchor navigation is wired up ONCE below (see "Unified in-page
+    // navigation") so it works whether or not ScrollSmoother loaded — critical on slow
+    // connections where the ScrollSmoother CDN script may fail to arrive.
   }
 
   /* ---------- 2. Header: light over video -> solid on scroll ---------- */
@@ -1363,9 +1356,40 @@ body.menu-open{overflow:hidden}
   };
   navToggle.addEventListener("click", () => setMenu(!mobileMenu.classList.contains("open")));
   mmBackdrop.addEventListener("click", () => setMenu(false));
-  mobileMenu.querySelectorAll(".mm-link, .mm-cta").forEach(a =>
-    a.addEventListener("click", () => setMenu(false)));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
+
+  /* ---------- Unified in-page navigation ----------
+     Works WITH ScrollSmoother and WITHOUT it (slow connections can drop the CDN script).
+     For links inside the mobile drawer we close the menu FIRST, then refresh trigger
+     positions and scroll on the next frames — otherwise the still-open drawer
+     (body overflow:hidden) leaves stale measurements and the target lands on a blank
+     area whose reveal animations never fired (the "white screen" bug). */
+  function scrollToSection(id){
+    const target = (id && id.length > 1) ? document.querySelector(id) : null;
+    if(!target) return;
+    if(smoother){
+      smoother.scrollTo(target, !reduceMotion, "top 70px");
+    } else {
+      const y = target.getBoundingClientRect().top + window.pageYOffset - 70;
+      window.scrollTo({ top:y, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener("click", e=>{
+      const id = a.getAttribute("href");
+      if(!id || id.length <= 1 || !document.querySelector(id)) return;  // "#" / off-page links pass through
+      e.preventDefault();
+      if(a.closest("#mobileMenu")){
+        setMenu(false);
+        requestAnimationFrame(()=> requestAnimationFrame(()=>{
+          if(typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+          scrollToSection(id);
+        }));
+      } else {
+        scrollToSection(id);
+      }
+    });
+  });
 
   /* ---------- Mini player (PiP) ---------- */
   const pip = document.getElementById("pip");
