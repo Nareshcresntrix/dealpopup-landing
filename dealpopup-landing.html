@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealPopup for Business — Put your offers in front of the UAE's deal-hunters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DealPopup — Design tokens (preserved from original design)
+   ============================================================ */
+:root{
+  --green:#0FA958;            /* primary brand green */
+  --green-dark:#0B7C41;       /* button hover / deep green */
+  --green-deep:#0E7A44;
+  --green-tint:#E8F6EE;       /* soft green backgrounds */
+  --green-cta:#12A155;        /* CTA banner gradient base */
+  --ink:#0F1B14;              /* near-black headings */
+  --body:#5B6B62;             /* body copy grey-green */
+  --muted:#8A968E;
+  --line:#E7EAE7;
+  --bg:#FFFFFF;
+  --bg-soft:#F6F7F5;          /* light section background */
+  --dark:#0A141F;             /* audience / footer navy */
+  --dark-card:#16222E;
+  --red:#E5484D;
+  --amber:#F5A623;
+  --radius-lg:20px;
+  --radius-md:14px;
+  --radius-sm:10px;
+  --shadow-card:0 2px 10px rgba(15,27,20,.05);
+  --shadow-lift:0 18px 40px rgba(15,27,20,.12);
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --container:1200px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto;scrollbar-width:none;-ms-overflow-style:none}   /* hide the default browser scrollbar (smooth scroll still works) */
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  overscroll-behavior:none;   /* no rubber-band bounce — premium ScrollSmoother feel */
+  font-size:15px;
+  line-height:1.6;
+}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.container{max-width:var(--container);margin:0 auto;padding:0 32px}
+
+/* ---------- Eyebrow / section labels ---------- */
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--green);margin-bottom:18px;
+}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--green);border-radius:2px}
+
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-0.02em;line-height:1.08;color:var(--ink)}
+h1{font-size:clamp(38px,5vw,58px);font-weight:700}
+h2{font-size:clamp(30px,3.6vw,42px);font-weight:700}
+h3{font-size:17px;font-weight:700;letter-spacing:-0.01em}
+.lead{color:var(--body);font-size:16px;max-width:520px}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  font-weight:600;font-size:14.5px;border-radius:999px;padding:14px 26px;
+  transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s cubic-bezier(.22,1,.36,1),background .3s;
+  will-change:transform;position:relative;overflow:hidden;
+}
+.btn-primary{background:var(--green-deep);color:#fff;box-shadow:0 6px 18px rgba(14,122,68,.25)}
+.btn-primary::after{
+  content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);
+  transform:translateX(-120%);transition:transform .7s cubic-bezier(.22,1,.36,1);
+}
+.btn-primary:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 28px rgba(14,122,68,.35)}
+.btn-primary:hover::after{transform:translateX(120%)}
+.btn-outline{border:1.5px solid var(--line);color:var(--ink);background:#fff}
+.btn-outline:hover{transform:translateY(-2px);border-color:var(--ink);box-shadow:0 8px 20px rgba(15,27,20,.08)}
+.btn-white{background:#fff;color:var(--green-deep)}
+.btn-white:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 14px 30px rgba(4,40,22,.3)}
+.btn .arrow{transition:transform .3s}
+.btn:hover .arrow{transform:translateX(3px)}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  transition:background .4s ease,box-shadow .4s ease,backdrop-filter .4s ease;
+  background:rgba(255,255,255,0);
+}
+.site-header.scrolled{
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 1px 0 var(--line),0 8px 24px rgba(15,27,20,.05);
+}
+/* backdrop-filter repaints every scroll frame — too costly on phones; use a solid bg there instead */
+@media(max-width:640px){
+  .site-header.scrolled{background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+.header-inner{
+  max-width:var(--container);margin:0 auto;padding:14px 32px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:700;font-size:18px}
+.brand .mark{
+  width:30px;height:30px;border-radius:9px;background:var(--green);
+  display:grid;place-items:center;color:#fff;flex:none;
+}
+.brand .mark svg{width:16px;height:16px}
+.brand .biz{
+  font-family:var(--font-body);font-size:9px;font-weight:700;letter-spacing:.1em;
+  background:var(--green-tint);color:var(--green-deep);padding:3px 7px;border-radius:5px;
+  transform:translateY(-6px);
+}
+.nav{display:flex;align-items:center;gap:28px}
+.nav a{font-size:14px;font-weight:500;color:var(--ink);position:relative;padding:4px 0}
+.nav a::after{
+  content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;
+  background:var(--green);border-radius:2px;transform:scaleX(0);transform-origin:right;
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+}
+.nav a:hover::after{transform:scaleX(1);transform-origin:left}
+.header-right{display:flex;align-items:center;gap:14px}
+.lang-chip{
+  width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);
+  display:grid;place-items:center;font-size:14px;font-weight:600;color:var(--ink);
+  transition:border-color .3s,transform .3s;background:#fff;
+}
+.lang-chip:hover{border-color:var(--green);transform:translateY(-1px)}
+.header-cta{padding:11px 20px;font-size:13.5px}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero{
+  padding:130px 0 70px;position:relative;overflow:hidden;
+  background:
+    radial-gradient(900px 480px at 85% 0%,rgba(15,169,88,.07),transparent 60%),
+    #fff;
+}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero h1 .accent{color:var(--green)}
+.hero .lead{margin:22px 0 30px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:34px;
+  font-size:13px;color:var(--muted);
+}
+.hero-meta b{color:var(--ink);font-weight:600}
+.hero-meta .dot{width:3px;height:3px;border-radius:50%;background:#C8CFC9;margin:0 8px}
+
+/* Hero visual — "video" stage: autoplaying animated device scene */
+.hero-visual{position:relative;perspective:1400px}
+.hero-stage{
+  position:relative;border-radius:26px;padding:8px;
+  will-change:transform;
+}
+.phones{position:relative;height:480px}
+.phone{
+  position:absolute;width:224px;border-radius:34px;background:#0B0F0D;
+  padding:6px;box-shadow:0 30px 70px rgba(10,20,15,.30),inset 0 0 0 1.5px rgba(255,255,255,.06);
+  will-change:transform;
+}
+.phone-screen{
+  position:relative;border-radius:28px;overflow:hidden;background:#F4F7F4;height:452px;
+  display:flex;flex-direction:column;
+}
+/* Real app screenshot fills the display, status bar anchored to the top */
+.phone-screen .phone-shot{
+  width:100%;height:100%;object-fit:cover;object-position:top center;display:block;
+}
+/* Premium glass reflection sweeping across the display */
+.phone-screen::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:2;border-radius:28px;
+  background:linear-gradient(125deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,.06) 22%,transparent 42%,transparent 100%);
+}
+.phone-1{left:4%;top:34px;transform:rotate(-12deg);z-index:2}
+.phone-2{right:2%;top:0;transform:rotate(10deg);z-index:3}
+.p-head{background:var(--green);color:#fff;padding:14px 12px 10px;font-size:10px;font-weight:600}
+.p-search{background:rgba(255,255,255,.22);border-radius:8px;padding:6px 8px;margin-top:8px;font-size:9px;color:rgba(255,255,255,.85)}
+.p-banner{background:#0F1B14;color:#fff;margin:8px;border-radius:10px;padding:9px 10px;font-size:9px;font-weight:600;line-height:1.4}
+.p-banner span{color:#7CE3AC}
+.p-row{display:flex;gap:6px;padding:0 8px 8px}
+.p-card{
+  flex:1;background:#fff;border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(15,27,20,.06);
+  font-size:8px;color:var(--body);
+}
+.p-card .thumb{height:44px;border-radius:7px;background:linear-gradient(135deg,#DFF3E7,#BEE7CF);margin-bottom:6px}
+.p-card b{display:block;color:var(--ink);font-size:8.5px;margin-bottom:2px}
+.p-card .tag{display:inline-block;background:var(--green-tint);color:var(--green-deep);font-weight:700;border-radius:4px;padding:1px 5px;font-size:7.5px;margin-top:4px}
+.p-coupon{
+  margin:0 8px 8px;background:#fff;border:1.5px dashed var(--green);border-radius:10px;
+  padding:8px 10px;font-size:8.5px;color:var(--body);
+}
+.p-coupon b{color:var(--green-deep);letter-spacing:.08em;font-size:9.5px}
+.badge-float{
+  position:absolute;font-family:var(--font-display);font-weight:700;font-size:11px;
+  color:#fff;border-radius:999px;padding:7px 13px;box-shadow:0 10px 24px rgba(15,27,20,.18);
+  will-change:transform;z-index:5;
+}
+.badge-off{background:var(--red);left:-3%;top:2px}
+.badge-pin{
+  background:#fff;color:var(--ink);font-family:var(--font-body);font-weight:600;font-size:10.5px;
+  right:-1%;top:-16px;display:flex;align-items:center;gap:5px;
+}
+.badge-pin svg{width:13px;height:13px;color:var(--green)}
+.badge-ends{
+  background:#fff;color:var(--ink);font-family:var(--font-body);font-weight:600;font-size:10.5px;
+  right:-3%;bottom:150px;display:flex;align-items:center;gap:6px;
+}
+/* White floating coupon card */
+.coupon-float{
+  position:absolute;left:-6%;top:120px;z-index:5;background:#fff;border-radius:12px;
+  border:1.5px dashed var(--green);padding:10px 14px;text-align:center;
+  box-shadow:0 14px 34px rgba(15,27,20,.16);will-change:transform;
+}
+.coupon-float .cf-lbl{font-size:8px;letter-spacing:.14em;font-weight:700;color:var(--muted)}
+.coupon-float .cf-code{font-family:var(--font-display);font-weight:700;letter-spacing:.16em;color:var(--green-deep);font-size:15px;margin:3px 0}
+.coupon-float .cf-sub{font-size:8.5px;color:var(--muted)}
+.badge-ends .pulse{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(229,72,77,.45)}50%{box-shadow:0 0 0 6px rgba(229,72,77,0)}}
+.toast{
+  position:absolute;left:4%;bottom:26px;z-index:6;background:#fff;border-radius:14px;
+  box-shadow:0 16px 40px rgba(15,27,20,.16);padding:12px 16px 12px 12px;
+  display:flex;gap:10px;align-items:flex-start;max-width:250px;will-change:transform;
+}
+.toast .check{
+  width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;
+  display:grid;place-items:center;flex:none;font-size:12px;
+}
+.toast b{display:block;font-size:12.5px;line-height:1.35;color:var(--ink)}
+.toast span{font-size:11px;color:var(--muted)}
+
+/* ============================================================
+   Category marquee
+   ============================================================ */
+.cats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;background:#fff}
+.cats .label{
+  text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  color:var(--muted);text-transform:uppercase;margin-bottom:18px;
+}
+.marquee{overflow:hidden;position:relative;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{display:flex;gap:12px;width:max-content;will-change:transform}
+.cat-pill{
+  display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+  border:1px solid var(--line);border-radius:999px;padding:9px 18px;
+  font-size:13px;font-weight:500;color:var(--ink);background:#fff;
+  transition:border-color .3s,background .3s;
+}
+.cat-pill:hover{border-color:var(--green);background:var(--green-tint)}
+.cat-pill .ico{color:var(--green);display:grid;place-items:center}
+.cat-pill .ico svg{width:14px;height:14px}
+
+/* ============================================================
+   Generic section spacing
+   ============================================================ */
+.section{padding:96px 0}
+.section-soft{background:var(--bg-soft)}
+.section-head{max-width:640px;margin-bottom:52px}
+.section-head .lead{margin-top:16px}
+
+/* ============================================================
+   Why merchants list here
+   ============================================================ */
+.why-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:22px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:30px;box-shadow:var(--shadow-card);
+  transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s cubic-bezier(.22,1,.36,1);
+  will-change:transform;
+}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lift)}
+.card .ico-tile{
+  width:42px;height:42px;border-radius:12px;background:var(--green-tint);color:var(--green-deep);
+  display:grid;place-items:center;margin-bottom:18px;
+}
+.card .ico-tile svg{width:19px;height:19px}
+.card h3{margin-bottom:10px}
+.card p{color:var(--body);font-size:14px}
+.why-col{display:flex;flex-direction:column;gap:22px}
+.stat-strip{
+  margin-top:22px;border:1px solid var(--line);border-radius:var(--radius-md);
+  padding:16px 18px;background:#FDFDFC;
+}
+.stat-strip .row1{display:flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.stat-strip .live{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.6s infinite}
+.stat-strip .row2{display:flex;gap:22px;margin-top:12px;font-size:13px;color:var(--body);flex-wrap:wrap}
+.stat-strip .row2 b{color:var(--ink);font-family:var(--font-display);font-size:15px}
+.stat-strip .num{display:inline-flex;align-items:center;gap:6px}
+.stat-strip .bar{height:6px;border-radius:99px;background:#EDF0ED;margin-top:14px;overflow:hidden}
+.stat-strip .bar i{display:block;height:100%;width:0;background:var(--green);border-radius:99px}
+
+/* ============================================================
+   How it works
+   ============================================================ */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.step{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:26px 22px;position:relative;box-shadow:var(--shadow-card);
+  transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s cubic-bezier(.22,1,.36,1);
+}
+.step:hover{transform:translateY(-6px);box-shadow:var(--shadow-lift)}
+.step .ico-tile{
+  width:40px;height:40px;border-radius:11px;border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink);margin-bottom:42px;background:#fff;
+}
+.step .ico-tile svg{width:17px;height:17px}
+.step .num{
+  position:absolute;left:22px;top:74px;width:22px;height:22px;border-radius:6px;
+  background:var(--ink);color:#fff;display:grid;place-items:center;
+  font-size:11px;font-weight:700;font-family:var(--font-display);
+}
+.step h3{margin:14px 0 8px;font-size:15.5px}
+.step p{color:var(--body);font-size:13px}
+/* Pinned 3D reveal for the four "How it works" cards (GSAP drives the transform).
+   The #how override drops the transform transition so scrubbed motion stays glued to the wheel. */
+#how .steps{perspective:1200px}
+#how .step{transform-style:preserve-3d;backface-visibility:hidden;will-change:transform,opacity,box-shadow,filter;transition:none}
+
+/* ============================================================
+   Merchant tools
+   ============================================================ */
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.tool{display:grid;grid-template-columns:1fr .9fr;gap:20px;align-items:center}
+.tool .demo{
+  border-radius:var(--radius-md);background:var(--bg-soft);border:1px solid var(--line);
+  padding:16px;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:10px;
+  overflow:hidden;position:relative;
+}
+.coupon-demo{
+  border:1.5px dashed var(--green);background:#fff;border-radius:12px;padding:14px;
+  text-align:center;
+}
+.coupon-demo .lbl{font-size:9px;letter-spacing:.14em;font-weight:700;color:var(--muted)}
+.coupon-demo .code{
+  font-family:var(--font-display);font-weight:700;letter-spacing:.2em;color:var(--green-deep);
+  font-size:15px;margin:6px 0;filter:blur(5px);transition:filter .5s;
+}
+.tool:hover .coupon-demo .code{filter:blur(0)}
+.coupon-demo .tap{
+  display:inline-block;background:var(--green);color:#fff;border-radius:999px;
+  font-size:10.5px;font-weight:600;padding:6px 14px;
+}
+.catalog-demo .pagebar{height:10px;border-radius:6px;background:#E4E9E4;margin:5px 0;position:relative;overflow:hidden}
+.catalog-demo .pagebar.w1{width:88%}.catalog-demo .pagebar.w2{width:70%}.catalog-demo .pagebar.w3{width:80%}
+.catalog-demo .thisweek{
+  position:absolute;top:16px;right:16px;z-index:2;background:var(--red);color:#fff;
+  font-size:9px;font-weight:700;border-radius:999px;padding:4px 9px;white-space:nowrap;
+  box-shadow:0 2px 6px rgba(229,72,77,.3);
+}
+.emirate-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.epill{
+  border:1px solid var(--line);background:#fff;border-radius:999px;
+  font-size:11.5px;font-weight:600;color:var(--body);padding:7px 14px;
+  transition:all .3s;
+}
+.epill.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.epill.on.g{background:var(--green);border-color:var(--green)}
+.push-demo .notif{
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;
+  display:flex;gap:9px;font-size:11px;color:var(--body);box-shadow:0 4px 12px rgba(15,27,20,.05);
+}
+.push-demo .notif .app{
+  width:22px;height:22px;border-radius:7px;background:var(--green);color:#fff;
+  display:grid;place-items:center;flex:none;font-size:10px;
+}
+.push-demo .notif b{display:block;color:var(--ink);font-size:11.5px}
+.push-demo .notif span{font-size:10px;color:var(--muted)}
+
+/* ============================================================
+   Audience — dark stats
+   ============================================================ */
+.audience{background:var(--dark);color:#fff;position:relative;overflow:hidden}
+.audience::after{
+  content:"deals";position:absolute;right:-2%;bottom:-8%;font-family:var(--font-display);
+  font-weight:700;font-size:220px;color:rgba(255,255,255,.025);pointer-events:none;letter-spacing:-.04em;
+}
+.audience .eyebrow{color:#5EDC9A}
+.audience .eyebrow::before{background:#5EDC9A}
+.audience h2{color:#fff}
+.audience .lead{color:#93A2AE}
+.aud-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.aud-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.aud-stat{
+  background:var(--dark-card);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-md);
+  padding:26px 24px;transition:transform .4s cubic-bezier(.22,1,.36,1),border-color .4s;
+}
+.aud-stat:hover{transform:translateY(-4px);border-color:rgba(94,220,154,.35)}
+.aud-stat .big{font-family:var(--font-display);font-weight:700;font-size:34px;letter-spacing:-.02em;color:#fff}
+.aud-stat .big .g{color:#5EDC9A}
+.aud-stat .big.green{color:#5EDC9A}
+.aud-stat p{color:#93A2AE;font-size:13px;margin-top:8px}
+
+/* ============================================================
+   Testimonials
+   ============================================================ */
+.quotes{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.quote{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:34px 30px 26px;position:relative;box-shadow:var(--shadow-card);
+  transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s cubic-bezier(.22,1,.36,1);
+}
+.quote:hover{transform:translateY(-6px);box-shadow:var(--shadow-lift)}
+.quote .qmark{
+  position:absolute;top:18px;right:24px;font-family:var(--font-display);font-size:56px;
+  color:var(--green-tint);line-height:1;font-weight:700;
+}
+.quote p{color:var(--body);font-size:14.5px;position:relative;z-index:1}
+.quote .who{display:flex;align-items:center;justify-content:space-between;margin-top:26px}
+.quote .who .l{display:flex;align-items:center;gap:12px}
+.quote .avatar{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none;
+}
+.quote .avatar.a1{background:var(--green)}
+.quote .avatar.a2{background:var(--ink)}
+.quote .who b{display:block;font-size:13.5px}
+.quote .who span{font-size:12px;color:var(--muted)}
+.quote .tag-ill{
+  font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--muted);
+  border:1px solid var(--line);border-radius:6px;padding:4px 8px;
+}
+
+/* ============================================================
+   Founding CTA
+   ============================================================ */
+.cta-wrap{padding:40px 0 96px}
+.cta-band{
+  border-radius:28px;overflow:hidden;position:relative;color:#fff;
+  background:
+    radial-gradient(700px 420px at 85% 20%,rgba(255,255,255,.14),transparent 55%),
+    linear-gradient(135deg,#0E8A4C,#0B6E3D);
+  padding:64px 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;
+}
+.cta-band .chip{
+  display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 14px;
+  font-size:11.5px;font-weight:600;margin-bottom:22px;
+}
+.cta-band h2{color:#fff}
+.cta-band .lead{color:rgba(255,255,255,.86);margin:16px 0 28px}
+.cta-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.cta-whats{color:#fff;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:8px;opacity:.95}
+.cta-whats:hover{text-decoration:underline}
+.cta-checks{display:flex;flex-wrap:wrap;gap:20px;margin-top:30px;font-size:13px}
+.cta-checks span{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.92)}
+.cta-checks svg{width:14px;height:14px;color:#9FF0C4}
+.offers-panel{
+  background:#fff;border-radius:18px;color:var(--ink);padding:22px;
+  box-shadow:0 30px 70px rgba(3,32,17,.35);transform:rotate(2deg);will-change:transform;
+}
+.offers-panel .ph{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;margin-bottom:14px}
+.offers-panel .ph .live{color:var(--red);font-size:10px;display:inline-flex;gap:5px;align-items:center}
+.offer-row{border-top:1px solid var(--line);padding:12px 0}
+.offer-row b{display:block;font-size:13px}
+.offer-row .sub{font-size:11px;color:var(--muted);margin:2px 0 8px}
+.offer-row .nums{font-size:11px;color:var(--body);display:flex;gap:14px}
+.offer-row .nums b{display:inline;font-size:11.5px}
+.offer-row .obar{height:5px;border-radius:99px;background:#EDF0ED;margin-top:8px;overflow:hidden}
+.offer-row .obar i{display:block;height:100%;width:0;background:var(--green);border-radius:99px}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start}
+.faq-left p{color:var(--body);margin-top:16px;font-size:15px}
+.faq-left a{color:var(--green-deep);font-weight:600}
+.faq-left a:hover{text-decoration:underline}
+.faq-item{
+  border:1px solid var(--line);border-radius:var(--radius-md);margin-bottom:12px;
+  background:#fff;overflow:hidden;transition:box-shadow .3s,border-color .3s;
+}
+.faq-item.open{border-color:#CFE9DB;box-shadow:0 8px 24px rgba(15,27,20,.06)}
+.faq-q{
+  width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:19px 22px;font-size:14.5px;font-weight:600;color:var(--ink);text-align:left;
+}
+.faq-q .plus{
+  width:26px;height:26px;border-radius:50%;background:var(--green-tint);
+  flex:none;position:relative;font-size:0;   /* hide the "+" text — the cross is drawn with two centred bars */
+  transition:transform .4s cubic-bezier(.22,1,.36,1),background .3s;
+}
+.faq-q .plus::before,
+.faq-q .plus::after{
+  content:"";position:absolute;top:50%;left:50%;
+  width:11px;height:2px;border-radius:2px;background:var(--green-deep);
+  transform:translate(-50%,-50%);           /* perfectly centred on the circle */
+  transition:background .3s;
+}
+.faq-q .plus::after{transform:translate(-50%,-50%) rotate(90deg)}   /* vertical bar → makes the "+" */
+.faq-item.open .plus{transform:rotate(45deg);background:var(--green)}   /* "+" rotates into a centred "✕" */
+.faq-item.open .plus::before,
+.faq-item.open .plus::after{background:#fff}
+.faq-a{height:0;overflow:hidden}
+.faq-a p{padding:0 22px 20px;color:var(--body);font-size:14px}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer{background:var(--dark);color:#93A2AE;padding:72px 0 0}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:56px;padding-bottom:56px}
+.footer .brand{color:#fff}
+.footer .brand .biz{background:rgba(94,220,154,.15);color:#5EDC9A}
+.footer p{font-size:13.5px;max-width:340px;margin-top:16px}
+.footer h4{
+  color:#fff;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:18px;font-family:var(--font-body);
+}
+.footer ul{list-style:none}
+.footer li{margin-bottom:11px}
+.footer li a{font-size:13.5px;transition:color .25s}
+.footer li a:hover{color:#fff}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.08);padding:22px 0;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  font-size:12px;color:#5E6E7A;
+}
+.footer-bottom .lang-chip{border-color:rgba(255,255,255,.15);color:#93A2AE;background:transparent}
+
+/* ============================================================
+   Video hero (Shopify-style full-bleed, shrinks on scroll)
+   ============================================================ */
+/* Immersive hero: starts FULL-BLEED (100vw x 100vh, radius 0), then shrinks into a premium
+   centred floating CARD over the first ~460px of scroll. .hv-sticky pins one viewport in
+   view (top-anchored, horizontally centred) while .hv-media shrinks inside it. */
+.hero-video{position:relative;height:calc(100vh + 460px);background:#fff}
+.hv-sticky{
+  position:relative;height:100vh;
+  display:flex;align-items:flex-start;justify-content:center;  /* pinned via ScrollTrigger (position:sticky breaks under ScrollSmoother) */
+}
+.hv-media{
+  position:relative;
+  width:100vw;height:100vh;   /* stays full-bleed; the shrinking CARD is drawn with clip-path (GPU, no reflow) */
+  overflow:hidden;
+  will-change:clip-path,filter;
+}
+.hv-media video{
+  position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;display:block;will-change:transform;
+}
+.hv-media::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(6,15,10,.62) 0%,rgba(6,15,10,.34) 48%,rgba(6,15,10,.15) 100%),
+             linear-gradient(0deg,rgba(6,15,10,.55) 0%,transparent 35%);
+}
+.hv-content{
+  position:relative;z-index:2;height:100%;max-width:var(--container);margin:0 auto;
+  padding:0 32px;display:flex;flex-direction:column;justify-content:center;
+}
+.hv-content .eyebrow{color:#7CE3AC}
+.hv-content .eyebrow::before{background:#7CE3AC}
+.hv-content h1{color:#fff}
+.hv-content h1 .accent{color:#7CE3AC}
+.hv-content .lead{color:rgba(255,255,255,.88);margin:22px 0 30px}
+.hv-content .hero-meta{color:rgba(255,255,255,.65)}
+.hv-content .hero-meta b{color:#fff}
+.hv-content .hero-meta .dot{background:rgba(255,255,255,.35)}
+.btn-play{
+  border:1.5px solid rgba(255,255,255,.55);color:#fff;background:transparent;
+}
+.btn-play:hover{transform:translateY(-2px);background:rgba(255,255,255,.1);border-color:#fff}
+.btn-play .pico{
+  width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(255,255,255,.7);
+  display:grid;place-items:center;font-size:9px;
+}
+.hv-scrollcue{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;
+  color:rgba(255,255,255,.75);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  display:flex;flex-direction:column;align-items:center;gap:8px;font-weight:600;
+}
+.hv-scrollcue .wheel{
+  width:20px;height:32px;border:1.5px solid rgba(255,255,255,.55);border-radius:12px;position:relative;
+}
+.hv-scrollcue .wheel::after{
+  content:"";position:absolute;left:50%;top:6px;width:3px;height:7px;border-radius:3px;
+  background:#fff;transform:translateX(-50%);animation:wheel 1.8s infinite;
+}
+@keyframes wheel{0%{opacity:1;top:6px}70%{opacity:0;top:16px}100%{opacity:0;top:6px}}
+
+/* Header light mode while over the video */
+.site-header.light .nav a,
+.site-header.light .brand{color:#fff}
+.site-header.light .lang-chip{border-color:rgba(255,255,255,.35);color:#fff;background:transparent}
+.site-header.light .brand .biz{background:rgba(124,227,172,.18);color:#7CE3AC}
+.site-header.scrolled .nav a,
+.site-header.scrolled .brand{color:var(--ink)}
+.site-header.scrolled .lang-chip{border-color:var(--line);color:var(--ink);background:#fff}
+.site-header.scrolled .brand .biz{background:var(--green-tint);color:var(--green-deep)}
+
+/* Floating mini player (appears after leaving the hero) */
+.pip{
+  position:fixed;right:22px;bottom:22px;z-index:90;width:220px;border-radius:14px;
+  overflow:hidden;box-shadow:0 20px 50px rgba(6,15,10,.4);cursor:pointer;
+  transform:translateY(24px);opacity:0;pointer-events:none;
+  transition:opacity .45s cubic-bezier(.22,1,.36,1),transform .45s cubic-bezier(.22,1,.36,1);
+  background:#000;
+}
+.pip.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.pip.show:hover{transform:translateY(-4px) scale(1.05);box-shadow:0 26px 60px rgba(6,15,10,.5)}  /* hover lift, like the Shopify mini player */
+.pip video{width:100%;height:124px;object-fit:cover;display:block;pointer-events:none}  /* clicks go to the .pip, not the video */
+.pip video::-webkit-media-controls,
+.pip video::-webkit-media-controls-overlay-play-button,
+.pip video::-webkit-media-controls-enclosure{display:none!important;-webkit-appearance:none}
+
+/* ---------- Video lightbox modal ---------- */
+.vmodal{
+  position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:24px;
+  background:rgba(6,10,8,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s ease;
+}
+.vmodal.open{opacity:1;visibility:visible}
+.vmodal-inner{
+  width:min(92vw,1100px);aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;
+  box-shadow:0 50px 130px rgba(0,0,0,.6);
+  transform:scale(.94);transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+.vmodal.open .vmodal-inner{transform:scale(1)}
+.vmodal-inner video{width:100%;height:100%;object-fit:cover;display:block}
+.vmodal-close{
+  position:absolute;top:22px;right:26px;width:46px;height:46px;border-radius:50%;z-index:2;
+  background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;padding:0;
+  border:1px solid rgba(255,255,255,.25);transition:background .25s ease,transform .35s ease;
+}
+.vmodal-close svg{width:20px;height:20px;display:block}
+.vmodal-close:hover{background:rgba(255,255,255,.22);transform:rotate(90deg)}
+.pip .pip-label{
+  position:absolute;left:10px;bottom:8px;color:#fff;font-size:11.5px;font-weight:600;
+  display:flex;align-items:center;gap:7px;text-shadow:0 1px 6px rgba(0,0,0,.5);
+}
+.pip .pip-label .pico{
+  width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.92);color:#0F1B14;
+  display:grid;place-items:center;font-size:8px;
+}
+.pip .pip-close{
+  position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+  background:rgba(0,0,0,.55);color:#fff;font-size:11px;display:grid;place-items:center;
+}
+.pip .pip-close:hover{background:rgba(0,0,0,.8)}
+.pip::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.45),transparent 55%)}
+.pip .pip-close,.pip .pip-label{z-index:2}
+/* Centred "expand" affordance — hidden until hover, then a minimal black shade + white icon */
+.pip .pip-shade{
+  position:absolute;inset:0;z-index:2;background:rgba(0,0,0,.28);
+  opacity:0;transition:opacity .3s ease;pointer-events:none;
+}
+.pip .pip-expand{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);z-index:3;
+  color:#fff;display:grid;place-items:center;
+  opacity:0;transition:transform .3s cubic-bezier(.22,1,.36,1),opacity .3s;pointer-events:none;
+}
+.pip .pip-expand svg{width:22px;height:22px;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))}
+.pip:hover .pip-shade{opacity:1}
+.pip:hover .pip-expand{transform:translate(-50%,-50%) scale(1);opacity:1}
+
+/* Product showcase (previous hero visual, now its own section) */
+.showcase{padding:96px 0 70px;position:relative;overflow:hidden;
+  background:radial-gradient(900px 480px at 85% 0%,rgba(15,169,88,.07),transparent 60%),#fff}
+
+@media(max-width:640px){
+  .hero-video{height:calc(100vh + 360px)}
+  .pip{width:172px;right:14px;bottom:14px}
+  .pip video{height:98px}
+}
+
+/* ============================================================
+   Splash intro (logo reveal -> flip into navbar)
+   ============================================================ */
+/* ONE logo element shared between centre & navbar. The header .brand carries
+   .is-splash during the intro (fixed, centred, enlarged); GSAP Flip then animates
+   the SAME element into its navbar slot — no second logo, no crossfade, no swap. */
+#splashBg{
+  position:fixed;inset:0;z-index:95;background:#fff;pointer-events:none;  /* above the mini-player (90), below the fixed header (100) so the one logo paints on top */
+}
+.sp-word{
+  font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;
+  display:inline-flex;line-height:1;
+}
+.sp-leaf{width:16px;height:16px;color:#fff;will-change:transform}
+.sp-letter{display:inline-block;transform-origin:center;will-change:transform,filter,opacity}
+/* SVG wordmark: height follows the current font-size, width keeps the glyph aspect ratio */
+.sp-wordmark{display:block;height:1em;width:auto;will-change:transform,opacity}
+
+/* Splash mode: the SAME header logo, floated to screen centre & enlarged */
+.brand.is-splash{
+  /* Centre in the WINDOW using viewport units. The logo's containing block (the fixed
+     header) shares the viewport's top-left origin, so 50vh/50vw land at the true window
+     centre no matter whether the containing block is the header or the viewport.
+     NOTE: the -50%/-50% centring offset is applied by GSAP (xPercent/yPercent), NOT a CSS
+     transform — a CSS transform here breaks GSAP Flip's landing maths. */
+  position:fixed;top:50vh;left:50vw;
+  width:fit-content;height:fit-content;margin:0;
+  z-index:320;gap:16px;
+  visibility:hidden;   /* stay hidden until JS centres it AND the webfont is ready — prevents the sideways jump */
+}
+.brand.is-splash .mark{width:74px;height:66px;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(15,169,88,.28)}
+.brand.is-splash .sp-leaf{width:36px;height:36px}
+.brand.is-splash .sp-word{font-size:46px;letter-spacing:-.03em;color:#1B2537}
+@media(max-width:640px){
+  .brand.is-splash .mark{width:58px;height:52px;border-radius:15px}
+  .brand.is-splash .sp-leaf{width:28px;height:28px}
+  .brand.is-splash .sp-word{font-size:34px}
+}
+
+/* Start hidden — the splash reveals these (JS fallback + reduced-motion restore them) */
+.nav,.header-right{opacity:0}
+.hv-content>*{opacity:0}
+.brand{will-change:transform}
+
+/* ---------- Reveal defaults (JS toggles) ---------- */
+.will-reveal{opacity:0}
+@media (prefers-reduced-motion:reduce){
+  .will-reveal{opacity:1!important;transform:none!important}
+  .nav,.header-right,.hv-content>*{opacity:1!important;transform:none!important}
+  #how .step{opacity:1!important;transform:none!important}
+  *{animation:none!important;transition:none!important}
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media(max-width:1024px){
+  .hero-grid,.aud-grid,.faq-grid{grid-template-columns:1fr;gap:48px}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .tools-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr}
+  .cta-band{grid-template-columns:1fr;padding:48px 36px}
+  .nav{display:none}
+}
+@media(max-width:640px){
+  .container{padding:0 20px}
+  .section{padding:64px 0}
+  .steps,.quotes{grid-template-columns:1fr}
+  .tool{grid-template-columns:1fr}
+  .aud-stats{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;gap:36px}
+  .phones{height:400px;transform:scale(.82);transform-origin:top center}
+  .hero{padding-top:110px}
+  .header-cta{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= Splash backdrop (plain white cover — the logo itself is the header logo) ================= -->
+<div id="splashBg" aria-hidden="true"></div>
+
+<!-- ================= Header (its logo IS the splash logo — one shared element) ================= -->
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a class="brand is-splash" href="#" id="brandTarget">
+      <span class="mark">
+        <svg class="sp-leaf" viewBox="540 540 626 626" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M989.548 1038.22H593.49V1002.86C593.49 953.187 612.947 905.547 647.581 870.422C682.215 835.298 729.187 815.565 778.167 815.565L953.064 815.566C953.064 835.599 945.217 854.813 931.25 868.978C917.282 883.144 898.337 891.102 878.584 891.102H778.167C748.942 891.102 720.913 902.877 700.247 923.836C689.519 934.716 681.231 947.609 675.741 961.639C676.103 961.628 676.466 961.621 676.83 961.621H989.548C1002.3 961.621 1014.54 956.481 1023.56 947.333C1032.58 938.184 1037.65 925.776 1037.65 912.837V745.045H717.141C704.383 745.045 692.149 750.185 683.128 759.334C674.107 768.483 669.039 780.89 669.039 793.829V830.769C657.022 838.607 645.771 847.776 635.511 858.181C617.653 876.292 603.489 897.449 593.51 920.448V793.829C593.51 760.575 606.535 728.683 629.72 705.169C652.906 681.655 684.352 668.444 717.141 668.444H1113.18V912.837C1113.18 946.091 1100.15 977.984 1076.97 1001.5C1053.78 1025.01 1022.34 1038.22 989.548 1038.22Z"/></svg>
+      </span>
+      <span class="sp-word" id="spWord"></span>
+    </a>
+    <nav class="nav">
+      <a href="#why">Why DealPopup</a>
+      <a href="#how">How it works</a>
+      <a href="#tools">Merchant tools</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="header-right">
+      <a href="#cta" class="btn btn-primary header-cta">List your business</a>
+    </div>
+  </div>
+</header>
+<!-- Floating mini player (fixed — kept OUTSIDE #smooth-content so ScrollSmoother's transform doesn't break it) -->
+<div class="pip" id="pip" role="button" aria-label="Back to the film">
+  <video muted loop playsinline preload="metadata" disablePictureInPicture disableRemotePlayback
+    src="hero-film (1).mp4"></video>
+  <span class="pip-shade" aria-hidden="true"></span>
+  <span class="pip-expand" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+  </span>
+  <span class="pip-label"><span class="pico">▶</span> Why we build DealPopup</span>
+  <button class="pip-close" id="pipClose" aria-label="Dismiss">✕</button>
+</div>
+<!-- ================= Video lightbox modal (opened by the hero button & the mini player) ================= -->
+<div class="vmodal" id="videoModal" aria-hidden="true" role="dialog" aria-label="DealPopup film">
+  <button class="vmodal-close" id="vmodalClose" aria-label="Close video">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="vmodal-inner">
+    <video id="modalVideo" playsinline controls preload="metadata" src="hero-film (1).mp4"></video>
+  </div>
+</div>
+<!-- ================= ScrollSmoother wrapper: ALL scrollable content lives in #smooth-content ================= -->
+<div id="smooth-wrapper">
+  <div id="smooth-content">
+<!-- ================= Video hero (full-bleed, autoplay, shrinks on scroll) ================= -->
+<section class="hero-video" id="heroVideo">
+  <div class="hv-sticky">
+    <div class="hv-media" id="hvMedia">
+      <!-- Demo clip — swap the src with your own brand film when ready -->
+      <video id="hvVideo" autoplay muted loop playsinline preload="metadata"
+        src="hero-film (1).mp4"></video>
+      <div class="hv-content">
+        <div class="eyebrow" data-hv>FOR UAE MERCHANTS</div>
+        <h1>
+          <span class="h-line">Put your offers</span><br>
+          <span class="h-line">in front of the</span><br>
+          <span class="h-line accent">UAE's deal-hunters</span>
+        </h1>
+        <p class="lead" data-hv>DealPopup is where shoppers across all seven emirates go to find deals, coupon codes and store catalogs, then walk into shops to redeem them. Publish your first offer in minutes, and watch every view, save and redemption as it happens.</p>
+        <div class="hero-actions" data-hv>
+          <a href="#cta" class="btn btn-primary">List your business <span class="arrow">→</span></a>
+          <button class="btn btn-play" id="soundToggle"><span class="pico">▶</span> Why we build DealPopup</button>
+        </div>
+        <div class="hero-meta" data-hv>
+          <b>Launching Aug 2026</b><span class="dot"></span>all <b>7</b>&nbsp;emirates at launch<span class="dot"></span><b>free</b>&nbsp;for founding merchants
+        </div>
+      </div>
+      <div class="hv-scrollcue" data-hv><span class="wheel"></span>Scroll</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= App showcase (phones) ================= -->
+<section class="showcase">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow will-reveal" data-fade>THE SHOPPER APP</div>
+      <h2 class="split">The app deal-hunters open every day</h2>
+      <p class="lead will-reveal" data-fade>Browse, save, reveal, redeem. Your offers live where the UAE already hunts for them — and every tap is counted for you.</p>
+    </div>
+
+    <!-- Autoplaying hero scene (video-style animated stage) -->
+    <div class="hero-visual">
+      <div class="hero-stage" id="heroStage">
+        <div class="phones">
+          <span class="badge-float badge-off" data-float="1">15% OFF</span>
+          <span class="badge-float badge-pin" data-float="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>Abu Dhabi</span>
+
+          <div class="phone phone-1" data-parallax="-40">
+            <div class="phone-screen">
+              <img class="phone-shot" src="home-screen.png" alt="DealPopup home screen" loading="lazy" decoding="async">
+            </div>
+          </div>
+
+          <div class="phone phone-2" data-parallax="-70">
+            <div class="phone-screen">
+              <img class="phone-shot" src="deal-details.png" alt="DealPopup deal details screen" loading="lazy" decoding="async">
+            </div>
+          </div>
+
+          <span class="badge-float badge-ends" data-float="3"><span class="pulse"></span>Ends in 5 days</span>
+
+          <div class="coupon-float" data-float="4">
+            <div class="cf-lbl">COUPON CODE</div>
+            <div class="cf-code">POPUP15</div>
+            <div class="cf-sub">Tap to copy · valid in-store</div>
+          </div>
+
+          <div class="toast" id="heroToast">
+            <span class="check">✓</span>
+            <div><b>Coupon redeemed in-store</b><span>Abu Dhabi · just now</span></div>
+          </div>
+        </div>
+      </div>         
+    </div>
+  </div>
+</section>
+
+<!-- ================= Categories marquee ================= -->
+<section class="cats">
+  <div class="label will-reveal" data-fade>SHOPPERS BROWSE DEALS IN 40+ CATEGORIES, EVERY DAY</div>
+  <div class="marquee">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+</section>
+
+<!-- ================= Why merchants list here ================= -->
+<section class="section" id="why">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow will-reveal" data-fade>WHY MERCHANTS LIST HERE</div>
+      <h2 class="split">Marketing that starts with intent, not interruptions</h2>
+      <p class="lead will-reveal" data-fade>Nobody scrolls DealPopup by accident. Every visitor opened the app to find an offer — the only question is whether they find yours.</p>
+    </div>
+    <div class="why-grid">
+      <div class="card will-reveal" data-card>
+        <span class="ico-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 15v3M12 10v8M17 6v12"/></svg></span>
+        <h3>Numbers you can act on</h3>
+        <p>Every offer reports views, saves, coupon reveals and in-store redemptions — live. Kill what's flat, double down on what converts, and walk into your Monday meeting with real figures.</p>
+        <div class="stat-strip">
+          <div class="row1"><span class="live"></span> WEEKEND FLASH SALE · LIVE</div>
+          <div class="row2">
+            <span class="num">👁 <b data-count="3800" data-suffix="k" data-div="1000">0</b> views</span>
+            <span class="num">🔖 <b data-count="1200" data-suffix="k" data-div="1000">0</b> saved</span>
+            <span class="num">✓ <b data-count="892">0</b> used</span>
+          </div>
+          <div class="bar"><i data-bar="74"></i></div>
+        </div>
+      </div>
+      <div class="why-col">
+        <div class="card will-reveal" data-card>
+          <span class="ico-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+          <h3>Shoppers come looking</h3>
+          <p>Your offer isn't squeezed between holiday photos on a feed. It's the answer to a search someone just ran.</p>
+        </div>
+        <div class="card will-reveal" data-card>
+          <span class="ico-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h3v3H8zM13 8h3M13 11h3M8 14h8M8 17h5"/></svg></span>
+          <h3>From screen to store</h3>
+          <p>QR redemption closes the loop between an offer viewed on a phone and a customer at your till, so footfall stops being a guess.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= How it works ================= -->
+<section class="section section-soft" id="how">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow will-reveal" data-fade>HOW IT WORKS</div>
+      <h2 class="split">From sign-up to first redemption in four steps</h2>
+    </div>
+    <div class="steps">
+      <div class="step" data-step>
+        <span class="ico-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span>
+        <span class="num">1</span>
+        <h3>Create your profile</h3>
+        <p>Add your brand, branches and contact details. We verify every merchant, so shoppers know you're the real thing.</p>
+      </div>
+      <div class="step" data-step>
+        <span class="ico-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+        <span class="num">2</span>
+        <h3>Publish your offers</h3>
+        <p>Deals, coupon codes or full weekly catalogs. Set prices in AED, pick your emirates, choose start and end dates.</p>
+      </div>
+      <div class="step" data-step>
+        <span class="ico-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21 12 16 5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span>
+        <span class="num">3</span>
+        <h3>Shoppers claim &amp; share</h3>
+        <p>Deal-hunters save your offer, reveal your code and get push alerts when you publish something new.</p>
+      </div>
+      <div class="step" data-step>
+        <span class="ico-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 19h2M14 21h2M21 14v2"/></svg></span>
+        <span class="num">4</span>
+        <h3>Redeem &amp; measure</h3>
+        <p>Scan the shopper's QR at your till. The redemption lands in your dashboard the same second.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Merchant tools ================= -->
+<section class="section" id="tools">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow will-reveal" data-fade>MERCHANT TOOLS</div>
+      <h2 class="split">Built for how you already sell</h2>
+      <p class="lead will-reveal" data-fade>Whether you run one boutique in Sharjah or forty branches across the Emirates, the same four tools do the heavy lifting.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="card tool will-reveal" data-card>
+        <div>
+          <h3>Coupon codes, revealed &amp; tracked</h3>
+          <p>Codes stay masked until a shopper taps Reveal, so every reveal is a measurable moment of intent instead of a code pasted to a forum.</p>
+        </div>
+        <div class="demo">
+          <div class="coupon-demo">
+            <div class="lbl">COUPON CODE</div>
+            <div class="code">POPUP50</div>
+            <span class="tap">Tap to reveal</span>
+          </div>
+        </div>
+      </div>
+      <div class="card tool will-reveal" data-card>
+        <div>
+          <h3>Weekly catalogs, flipped on phones</h3>
+          <p>Upload the same flyer you already print. Shoppers flip through it page by page, and every page view is counted.</p>
+        </div>
+        <div class="demo catalog-demo">
+          <span class="thisweek">This week</span>
+          <div class="pagebar w1"></div>
+          <div class="pagebar w2"></div>
+          <div class="pagebar w3"></div>
+          <div class="pagebar w2"></div>
+        </div>
+      </div>
+      <div class="card tool will-reveal" data-card>
+        <div>
+          <h3>Target by emirate</h3>
+          <p>A Ramadan offer for your Abu Dhabi branches shouldn't ping shoppers in Fujairah. Choose exactly where each offer shows.</p>
+        </div>
+        <div class="demo">
+          <div class="emirate-pills">
+            <span class="epill on">Dubai</span>
+            <span class="epill on">Abu Dhabi</span>
+            <span class="epill">Sharjah</span>
+            <span class="epill">Ajman</span>
+            <span class="epill on g">RAK</span>
+            <span class="epill">Fujairah</span>
+            <span class="epill">UAQ</span>
+          </div>
+        </div>
+      </div>
+      <div class="card tool will-reveal" data-card>
+        <div>
+          <h3>Push alerts to your followers</h3>
+          <p>Shoppers who follow your brand hear about your new offer the minute it goes live. No ad budget required.</p>
+        </div>
+        <div class="demo push-demo">
+          <div class="notif"><span class="app">🔔</span><div><b>New at Oasis Home: up to 40% off bedroom sets</b><span>DealPopup · now</span></div></div>
+          <div class="notif"><span class="app">⏳</span><div><b>Your saved deal ends tomorrow</b><span>DealPopup · 2h</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Audience (dark) ================= -->
+<section class="section audience">
+  <div class="container aud-grid">
+    <div>
+      <div class="eyebrow will-reveal" data-fade>THE AUDIENCE</div>
+      <h2 class="split">A shopper base that grew up hunting offers</h2>
+      <p class="lead will-reveal" data-fade>From Dubai Shopping Festival veterans to weekly-catalog loyalists, the UAE treats deal-hunting as a sport. DealPopup gives that audience one place to look, and gives you one place to be found.</p>
+    </div>
+    <div class="aud-stats">
+      <div class="aud-stat will-reveal" data-card><div class="big"><span class="g">7</span>/7</div><p>emirates covered at launch</p></div>
+      <div class="aud-stat will-reveal" data-card><div class="big">3</div><p>offer formats: deals, coupons, catalogs</p></div>
+      <div class="aud-stat will-reveal" data-card><div class="big"><span data-count="40">0</span>+</div><p>shopping categories</p></div>
+      <div class="aud-stat will-reveal" data-card><div class="big green">AED 0</div><p>listing fees for founding merchants</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Testimonials ================= -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow will-reveal" data-fade>THE MERCHANT EXPERIENCE</div>
+      <h2 class="split">What a launch month can look like</h2>
+    </div>
+    <div class="quotes">
+      <div class="quote will-reveal" data-card>
+        <span class="qmark">"</span>
+        <p>Weekday lunch was our dead zone. We ran a buy-one-get-one on mains, Monday to Thursday only — 214 claims in the first week, and I could see which branch each redemption came from.</p>
+        <div class="who">
+          <div class="l">
+            <span class="avatar a1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M17 3c-2 2-2 5-2 8h4v10"/></svg></span>
+            <div><b>Restaurant group</b><span>JLT &amp; Marina, Dubai</span></div>
+          </div>
+          <span class="tag-ill">ILLUSTRATIVE</span>
+        </div>
+      </div>
+      <div class="quote will-reveal" data-card>
+        <span class="qmark">"</span>
+        <p>I used to post codes on social and pray. Here I can see 1,900 reveals against 240 redemptions and actually work out my real cost per customer. That changed how I price offers.</p>
+        <div class="who">
+          <div class="l">
+            <span class="avatar a2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18"/></svg></span>
+            <div><b>Fashion boutique</b><span>City Centre Sharjah</span></div>
+          </div>
+          <span class="tag-ill">ILLUSTRATIVE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Founding CTA ================= -->
+<section class="cta-wrap" id="cta">
+  <div class="container">
+    <div class="cta-band will-reveal" data-band>
+      <div>
+        <span class="chip">⚡ Launching UAE-wide · August 2026</span>
+        <h2>Be on the shelf on day one</h2>
+        <p class="lead">We're onboarding a limited group of founding merchants before public launch. Spots are capped per category, and the list closes when the cohort is full.</p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-white">Claim a founding spot <span class="arrow">→</span></a>
+          <a href="#" class="cta-whats">💬 or message us on WhatsApp</a>
+        </div>
+        <div class="cta-checks">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m4 12 5 5L20 6"/></svg> Homepage placement at launch</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m4 12 5 5L20 6"/></svg> Zero listing fees</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m4 12 5 5L20 6"/></svg> Hands-on onboarding</span>
+        </div>
+      </div>
+      <div class="offers-panel" data-panel>
+        <div class="ph">Your offers · this week <span class="live"><span class="pulse" style="width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block"></span> live</span></div>
+        <div class="offer-row" style="border-top:none">
+          <b>Weekend flash sale</b>
+          <div class="sub">Deal · Dubai &amp; Sharjah</div>
+          <div class="nums"><span><b>3.8k</b> views</span><span><b>1.2k</b> saved</span><span><b>892</b> used</span></div>
+          <div class="obar"><i data-bar="76"></i></div>
+        </div>
+        <div class="offer-row">
+          <b>POPUP50 coupon</b>
+          <div class="sub">Coupon · All emirates</div>
+          <div class="nums"><span><b>1.9k</b> reveals</span><span><b>240</b> used</span></div>
+          <div class="obar"><i data-bar="44"></i></div>
+        </div>
+        <div class="offer-row">
+          <b>Ramadan catalog</b>
+          <div class="sub">Catalog · Abu Dhabi</div>
+          <div class="nums"><span><b>6.1k</b> page views</span></div>
+          <div class="obar"><i data-bar="62"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="section section-soft" id="faq" style="padding-top:70px">
+  <div class="container faq-grid">
+    <div class="faq-left">
+      <div class="eyebrow will-reveal" data-fade>QUESTIONS</div>
+      <h2 class="split">What merchants ask us</h2>
+      <p class="will-reveal" data-fade>Anything else? Write to <a href="mailto:merchants@dealpopup.com">merchants@dealpopup.com</a> and a human replies within one working day.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item will-reveal" data-fade>
+        <button class="faq-q">What does it cost to list my offers? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Nothing during the founding cohort. Founding merchants publish deals, coupons and catalogs with zero listing fees, and keep preferential terms after public launch.</p></div>
+      </div>
+      <div class="faq-item will-reveal" data-fade>
+        <button class="faq-q">What kinds of offers can I publish? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Three formats: deals with a discounted price, coupon codes that shoppers reveal in the app, and full weekly catalogs uploaded as flip-through pages.</p></div>
+      </div>
+      <div class="faq-item will-reveal" data-fade>
+        <button class="faq-q">How do in-store redemptions actually work? <span class="plus">+</span></button>
+        <div class="faq-a"><p>The shopper shows a QR code at your till. Your staff scan it with any phone — no hardware — and the redemption appears in your dashboard instantly.</p></div>
+      </div>
+      <div class="faq-item will-reveal" data-fade>
+        <button class="faq-q">Can I limit an offer to certain emirates or branches? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Yes. Every offer can target any combination of the seven emirates and specific branches, so shoppers only see offers they can actually redeem nearby.</p></div>
+      </div>
+      <div class="faq-item will-reveal" data-fade>
+        <button class="faq-q">Do I need a developer or any technical setup? <span class="plus">+</span></button>
+        <div class="faq-a"><p>No. Everything runs from a web dashboard: create a profile, upload offers, scan QR codes with a phone. If you can post on social media, you can use DealPopup.</p></div>
+      </div>
+      <div class="faq-item will-reveal" data-fade>
+        <button class="faq-q">Is the platform available in Arabic? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Yes. The shopper app and merchant dashboard are fully bilingual — English and Arabic with complete right-to-left support.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Footer ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="#">
+          <span class="mark"><svg viewBox="540 540 626 626" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M989.548 1038.22H593.49V1002.86C593.49 953.187 612.947 905.547 647.581 870.422C682.215 835.298 729.187 815.565 778.167 815.565L953.064 815.566C953.064 835.599 945.217 854.813 931.25 868.978C917.282 883.144 898.337 891.102 878.584 891.102H778.167C748.942 891.102 720.913 902.877 700.247 923.836C689.519 934.716 681.231 947.609 675.741 961.639C676.103 961.628 676.466 961.621 676.83 961.621H989.548C1002.3 961.621 1014.54 956.481 1023.56 947.333C1032.58 938.184 1037.65 925.776 1037.65 912.837V745.045H717.141C704.383 745.045 692.149 750.185 683.128 759.334C674.107 768.483 669.039 780.89 669.039 793.829V830.769C657.022 838.607 645.771 847.776 635.511 858.181C617.653 876.292 603.489 897.449 593.51 920.448V793.829C593.51 760.575 606.535 728.683 629.72 705.169C652.906 681.655 684.352 668.444 717.141 668.444H1113.18V912.837C1113.18 946.091 1100.15 977.984 1076.97 1001.5C1053.78 1025.01 1022.34 1038.22 989.548 1038.22Z"/></svg></span>
+          <svg class="sp-wordmark" viewBox="0 0 115 21" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:20px"><g clip-path="url(#dpFa)"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M0 14.5545V0.937223H7.1671C9.70305 0.937223 11.7521 1.62629 13.3142 3.00457C14.8762 4.36442 15.6572 6.20217 15.6572 8.51767C15.6572 10.8332 14.8762 12.6801 13.3142 14.0583C11.7521 15.4182 9.70305 16.0981 7.1671 16.0981H1.54362C1.12098 16.0981 0.753461 15.9512 0.441054 15.6572C0.147065 15.3447 0 14.9771 0 14.5545ZM4.30017 12.6801H7.00161C8.30636 12.6801 9.34467 12.3125 10.1165 11.5775C10.9067 10.824 11.3018 9.80414 11.3018 8.51767C11.3018 7.21293 10.9067 6.19304 10.1165 5.45785C9.34467 4.72281 8.30636 4.35529 7.00161 4.35529H1.24049L4.30017 6.00928V12.6801ZM28.8472 10.2268C28.8472 10.2819 28.8287 10.6219 28.792 11.2467H20.2467C20.3018 11.412 20.3662 11.5682 20.4396 11.7153C20.9175 12.6709 21.8178 13.1487 23.141 13.1487C24.1518 13.1487 25.0523 12.8087 25.8424 12.1288L27.3861 13.7275C27.57 13.9113 27.6526 14.141 27.6342 14.4167C27.6158 14.674 27.4964 14.8853 27.2758 15.0507C26.21 15.8777 24.7859 16.2912 23.0032 16.2912C20.945 16.2912 19.2819 15.7215 18.0138 14.5821C16.7458 13.4427 16.1118 11.9817 16.1118 10.1992C16.1118 8.435 16.7182 6.98319 17.9312 5.84379C19.1624 4.70439 20.7061 4.13483 22.5622 4.13483C24.3631 4.13483 25.8609 4.68611 27.0554 5.78868C28.2499 6.87297 28.8472 8.35233 28.8472 10.2268ZM20.3293 8.54523C20.2408 8.79339 20.2491 9.09651 20.2491 9.09651H24.9879C24.8777 8.4717 24.6112 7.98481 24.1886 7.63557C23.7658 7.26804 23.233 7.08428 22.5897 7.08428C21.4872 7.08428 20.7337 7.57131 20.3293 8.54523ZM34.8289 4.13483C38.8351 4.13483 40.8381 5.94488 40.8381 9.56512V16.0981H37.9712C37.6957 16.0981 37.4659 16.0063 37.2822 15.8226C37.0984 15.6204 37.0064 15.3815 37.0064 15.1058V14.5821C36.4 15.7215 35.2422 16.2912 33.5333 16.2912C32.155 16.2912 31.0798 15.9512 30.3081 15.2713C29.5362 14.5913 29.1503 13.7184 29.1503 12.6525C29.1503 11.5315 29.5731 10.6678 30.4183 10.0613C31.282 9.4549 32.596 9.15163 34.3603 9.15163H36.5959C36.5959 9.15163 36.6114 8.60035 36.5929 8.54523C36.3174 7.69996 35.5271 7.27718 34.2223 7.27718C33.5424 7.27718 32.8625 7.40583 32.1825 7.66312C31.8333 7.81019 31.4842 7.81933 31.1351 7.69068C30.8043 7.56203 30.5561 7.3323 30.3908 7.00161L29.6464 5.51311C30.3081 5.07205 31.0983 4.73209 32.0171 4.49307C32.9544 4.2542 33.8916 4.13483 34.8289 4.13483ZM34.6909 13.6724C35.7201 13.6724 36.3909 13.2222 36.7033 12.3217V11.3018H34.9391C33.7446 11.3018 33.1473 11.6969 33.1473 12.4872C33.1473 12.8363 33.276 13.1211 33.5333 13.3416C33.8088 13.5622 34.1948 13.6724 34.6909 13.6724ZM41.5481 0H44.5526C44.865 0 45.1223 0.110228 45.3245 0.330684C45.5451 0.551282 45.6553 0.808576 45.6553 1.10256V16.0981H42.5404C42.2648 16.0981 42.0258 16.0063 41.8238 15.8226C41.6399 15.6204 41.5481 15.3815 41.5481 15.1058V0ZM60.0101 0.937223C62.0683 0.937223 63.7039 1.44253 64.9168 2.45328C66.1296 3.44562 66.736 4.80548 66.736 6.533C66.736 8.26038 66.1296 9.62952 64.9168 10.6403C63.7039 11.6326 62.0683 12.1288 60.0101 12.1288H57.3638V14.5545C57.3638 14.9771 57.2076 15.3447 56.8951 15.6572C56.6012 15.9512 56.2336 16.0981 55.7926 16.0981H53.0636V0.937223H60.0101ZM59.7344 8.73827C60.6165 8.73827 61.2781 8.55437 61.7192 8.18685C62.1785 7.80105 62.4083 7.24963 62.4083 6.533C62.4083 5.81623 62.1785 5.26495 61.7192 4.87901C61.2781 4.49307 60.6165 4.30017 59.7344 4.30017H54.6348L57.3638 5.43029V8.73827H59.7344ZM106.155 4.32773V14.8027C106.155 15.1518 106.026 15.455 105.769 15.7123C105.512 15.9696 105.208 16.0981 104.859 16.0981H102.213L103.591 13.0936C102.819 14.233 102.011 15.0507 101.165 15.5468C100.32 16.043 99.5114 16.2912 98.7396 16.2912C97.2143 16.2912 96.0014 15.841 95.101 14.9404C94.2004 14.0399 93.7503 12.6985 93.7503 10.9158V4.35529H96.7824C97.0948 4.35529 97.3521 4.45638 97.5543 4.65856C97.7564 4.86059 97.8575 5.11789 97.8575 5.43029V10.2268C97.8575 11.9175 98.5099 12.7627 99.8146 12.7627C100.476 12.7627 101.009 12.5423 101.414 12.1012C101.818 11.6417 102.02 10.9434 102.02 10.0062V5.73356C102.02 5.34762 102.158 5.0168 102.433 4.74123C102.709 4.46552 103.04 4.32773 103.426 4.32773H106.155ZM114.176 4.13483C115.811 4.13483 117.181 4.69525 118.283 5.81623C119.386 6.91894 119.937 8.38903 119.937 10.2268C119.937 12.0461 119.386 13.5162 118.283 14.6372C117.181 15.7399 115.811 16.2912 114.176 16.2912C112.798 16.2912 111.704 15.8777 110.896 15.0507V19.1579C110.896 19.4704 110.785 19.7368 110.565 19.9574C110.344 20.1778 110.078 20.2882 109.765 20.2882H106.788V5.70601C106.788 5.33848 106.917 5.02608 107.174 4.76878C107.45 4.49307 107.781 4.35529 108.167 4.35529H110.703L108.69 7.19451C110.51 5.15472 112.338 4.13483 114.176 4.13483ZM111.53 12.2666C112.007 12.7627 112.605 13.0109 113.321 13.0109C114.038 13.0109 114.626 12.7627 115.085 12.2666C115.545 11.7704 115.775 11.0905 115.775 10.2268C115.775 9.36309 115.545 8.68301 115.085 8.18685C114.626 7.6724 114.038 7.41511 113.321 7.41511C112.605 7.41511 112.007 7.6724 111.53 8.18685C111.07 8.68301 110.84 9.36309 110.84 10.2268C110.84 11.0905 111.07 11.7704 111.53 12.2666ZM79.9976 11.2639C79.8176 12.6427 79.2119 13.8023 78.1803 14.7428C76.9491 15.8822 75.3686 16.4519 73.439 16.4519C71.5095 16.4519 69.9199 15.8822 68.6703 14.7428C67.4206 13.5852 66.7958 12.1242 66.7958 10.36C66.7958 8.59578 67.4206 7.14397 68.6703 6.00471C69.9199 4.86531 71.5095 4.2956 73.439 4.2956C75.3686 4.2956 76.9491 4.86531 78.1803 6.00471C79.2109 6.94421 79.8164 8.09632 79.9972 9.46089C80.0356 9.75103 80.0547 10.0507 80.0547 10.36C80.0547 10.6711 80.0357 10.9724 79.9976 11.2639ZM73.439 13.1717C74.1557 13.1717 74.7438 12.9235 75.2033 12.4273C75.6626 11.9312 75.8923 11.2421 75.8923 10.36C75.8923 9.4963 75.6626 8.81637 75.2033 8.32021C74.7438 7.8239 74.1557 7.57588 73.439 7.57588C72.7223 7.57588 72.125 7.8239 71.6473 8.32021C71.1878 8.81637 70.9582 9.4963 70.9582 10.36C70.9582 11.2237 71.1878 11.9129 71.6473 12.4273C72.125 12.9235 72.7223 13.1717 73.439 13.1717ZM80.352 8.08347C80.2693 7.84617 80.1725 7.61586 80.0617 7.39255C79.9833 7.23806 79.9425 7.06715 79.9425 6.89381C79.9395 6.18647 79.9395 4.30988 79.9395 4.30988C79.9395 3.94236 80.0681 3.62995 80.3254 3.37266C80.6011 3.09709 80.9318 2.95916 81.3178 2.95916H83.8539L83.8594 4.52934L83.6308 4.84931C84.4811 4.51035 85.4325 4.34087 86.4849 4.34087C86.5392 4.34087 86.593 4.34129 86.6467 4.34229C88.503 4.37328 90.0295 4.94255 91.2262 6.04997C92.2566 6.98947 92.8623 8.14144 93.043 9.50573C93.0732 9.78972 93.0883 10.0836 93.0883 10.3876C93.0883 10.8088 93.0588 11.2113 92.9996 11.5952C92.7768 12.8491 92.1856 13.9134 91.2262 14.7882C90.7604 15.2192 90.2447 15.5687 89.679 15.8367C88.9939 16.1612 88.2354 16.3661 87.4037 16.4515C87.1067 16.4821 86.8005 16.4972 86.4849 16.4972C85.604 16.4972 84.7937 16.3785 84.0545 16.141C84.0468 17.3526 84.0468 19.3187 84.0468 19.3187C84.0468 19.6311 83.9365 19.8977 83.7159 20.1182C83.4955 20.3388 83.2291 20.449 82.9166 20.449H79.9395V13.8486C79.9395 13.6754 79.9803 13.5046 80.0584 13.35C80.1714 13.123 80.2698 12.8885 80.3536 12.6465C80.5962 11.9467 80.7174 11.1846 80.7174 10.36C80.7174 9.54028 80.5953 8.78154 80.352 8.08347ZM86.5272 7.57631C86.509 7.57602 86.4908 7.57588 86.4725 7.57588C85.7559 7.57588 85.1586 7.83318 84.6807 8.34776C84.2214 8.84393 83.9917 9.52386 83.9917 10.3876C83.9917 10.926 84.0809 11.393 84.2594 11.7885C84.3689 12.0434 84.5134 12.2714 84.6931 12.4727C85.171 12.9689 85.7683 13.2169 86.4849 13.2169C86.8917 13.2169 87.2571 13.1371 87.5811 12.9772C87.867 12.8533 88.1223 12.6699 88.3469 12.4273C88.8064 11.9312 89.0362 11.2421 89.0362 10.36C89.0362 9.4963 88.8064 8.81637 88.3469 8.32021C87.8876 7.8239 87.2995 7.57588 86.5829 7.57588C86.5642 7.57588 86.5456 7.57602 86.5272 7.57631Z"/></g><g clip-path="url(#dpFb)"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M-6.01318 14.5545V0.937223H1.15391C3.68987 0.937223 5.73894 1.62629 7.30097 3.00457C8.86301 4.36442 9.64403 6.20217 9.64403 8.51767C9.64403 10.8332 8.86301 12.6801 7.30097 14.0583C5.73894 15.4182 3.68987 16.0981 1.15391 16.0981H-4.46956C-4.8922 16.0981 -5.25972 15.9512 -5.57213 15.6572C-5.86612 15.3447 -6.01318 14.9771 -6.01318 14.5545ZM-1.71301 12.6801H0.98843C2.29317 12.6801 3.33148 12.3125 4.10337 11.5775C4.89352 10.824 5.2886 9.80414 5.2886 8.51767C5.2886 7.21293 4.89352 6.19304 4.10337 5.45785C3.33148 4.72281 2.29317 4.35529 0.98843 4.35529H-4.77269L-1.71301 6.00928V12.6801ZM22.834 10.2268C22.834 10.2819 22.8155 10.6219 22.7789 11.2467H14.2335C14.2886 11.412 14.353 11.5682 14.4264 11.7153C14.9043 12.6709 15.8047 13.1487 17.1278 13.1487C18.1386 13.1487 19.0391 12.8087 19.8293 12.1288L21.3729 13.7275C21.5568 13.9113 21.6395 14.141 21.621 14.4167C21.6026 14.674 21.4832 14.8853 21.2627 15.0507C20.1968 15.8777 18.7727 16.2912 16.99 16.2912C14.9318 16.2912 13.2687 15.7215 12.0007 14.5821C10.7326 13.4427 10.0986 11.9817 10.0986 10.1992C10.0986 8.435 10.705 6.98319 11.918 5.84379C13.1492 4.70439 14.693 4.13483 16.549 4.13483C18.3499 4.13483 19.8477 4.68611 21.0422 5.78868C22.2367 6.87297 22.834 8.35233 22.834 10.2268ZM14.3162 8.54523C14.2276 8.79339 14.2359 9.09651 14.2359 9.09651H18.9747C18.8645 8.4717 18.598 7.98481 18.1754 7.63557C17.7526 7.26804 17.2198 7.08428 16.5765 7.08428C15.474 7.08428 14.7205 7.57131 14.3162 8.54523ZM28.8157 4.13483C32.8219 4.13483 34.825 5.94488 34.825 9.56512V16.0981H31.958C31.6825 16.0981 31.4527 16.0063 31.269 15.8226C31.0852 15.6204 30.9933 15.3815 30.9933 15.1058V14.5821C30.3869 15.7215 29.229 16.2912 27.5201 16.2912C26.1418 16.2912 25.0667 15.9512 24.2949 15.2713C23.523 14.5913 23.1371 13.7184 23.1371 12.6525C23.1371 11.5315 23.5599 10.6678 24.4051 10.0613C25.2688 9.4549 26.5829 9.15163 28.3471 9.15163H30.5828C30.5828 9.15163 30.5982 8.60035 30.5798 8.54523C30.3042 7.69996 29.5139 7.27718 28.2092 7.27718C27.5292 7.27718 26.8493 7.40583 26.1694 7.66312C25.8201 7.81019 25.471 7.81933 25.1219 7.69068C24.7911 7.56203 24.5429 7.3323 24.3776 7.00161L23.6333 5.51311C24.2949 5.07205 25.0851 4.73209 26.0039 4.49307C26.9412 4.2542 27.8785 4.13483 28.8157 4.13483ZM28.6778 13.6724C29.7069 13.6724 30.3777 13.2222 30.6901 12.3217V11.3018H28.9259C27.7314 11.3018 27.1341 11.6969 27.1341 12.4872C27.1341 12.8363 27.2628 13.1211 27.5201 13.3416C27.7957 13.5622 28.1816 13.6724 28.6778 13.6724ZM35.5349 0H38.5394C38.8519 0 39.1091 0.110228 39.3113 0.330684C39.5319 0.551282 39.6422 0.808576 39.6422 1.10256V16.0981H36.5272C36.2516 16.0981 36.0126 16.0063 35.8106 15.8226C35.6267 15.6204 35.5349 15.3815 35.5349 15.1058V0ZM53.9969 0.937223C56.0551 0.937223 57.6907 1.44253 58.9036 2.45328C60.1164 3.44562 60.7228 4.80548 60.7228 6.533C60.7228 8.26038 60.1164 9.62952 58.9036 10.6403C57.6907 11.6326 56.0551 12.1288 53.9969 12.1288H51.3506V14.5545C51.3506 14.9771 51.1944 15.3447 50.882 15.6572C50.588 15.9512 50.2205 16.0981 49.7794 16.0981H47.0504V0.937223H53.9969ZM53.7212 8.73827C54.6033 8.73827 55.265 8.55437 55.706 8.18685C56.1653 7.80105 56.3951 7.24963 56.3951 6.533C56.3951 5.81623 56.1653 5.26495 55.706 4.87901C55.265 4.49307 54.6033 4.30017 53.7212 4.30017H48.6216L51.3506 5.43029V8.73827H53.7212ZM100.142 4.32773V14.8027C100.142 15.1518 100.013 15.455 99.7556 15.7123C99.4983 15.9696 99.1951 16.0981 98.8459 16.0981H96.1996L97.5779 13.0936C96.8062 14.233 95.9974 15.0507 95.1522 15.5468C94.3068 16.043 93.4982 16.2912 92.7264 16.2912C91.2011 16.2912 89.9882 15.841 89.0878 14.9404C88.1873 14.0399 87.7371 12.6985 87.7371 10.9158V4.35529H90.7692C91.0816 4.35529 91.3389 4.45638 91.5411 4.65856C91.7432 4.86059 91.8443 5.11789 91.8443 5.43029V10.2268C91.8443 11.9175 92.4967 12.7627 93.8015 12.7627C94.463 12.7627 94.996 12.5423 95.4003 12.1012C95.8046 11.6417 96.0067 10.9434 96.0067 10.0062V5.73356C96.0067 5.34762 96.1445 5.0168 96.4202 4.74123C96.6958 4.46552 97.0266 4.32773 97.4126 4.32773H100.142ZM108.163 4.13483C109.798 4.13483 111.167 4.69525 112.27 5.81623C113.373 6.91894 113.924 8.38903 113.924 10.2268C113.924 12.0461 113.373 13.5162 112.27 14.6372C111.167 15.7399 109.798 16.2912 108.163 16.2912C106.785 16.2912 105.691 15.8777 104.882 15.0507V19.1579C104.882 19.4704 104.772 19.7368 104.552 19.9574C104.331 20.1778 104.065 20.2882 103.752 20.2882H100.775V5.70601C100.775 5.33848 100.904 5.02608 101.161 4.76878C101.437 4.49307 101.768 4.35529 102.154 4.35529H104.689L102.677 7.19451C104.497 5.15472 106.325 4.13483 108.163 4.13483ZM105.516 12.2666C105.994 12.7627 106.591 13.0109 107.308 13.0109C108.025 13.0109 108.613 12.7627 109.072 12.2666C109.532 11.7704 109.762 11.0905 109.762 10.2268C109.762 9.36309 109.532 8.68301 109.072 8.18685C108.613 7.6724 108.025 7.41511 107.308 7.41511C106.591 7.41511 105.994 7.6724 105.516 8.18685C105.057 8.68301 104.827 9.36309 104.827 10.2268C104.827 11.0905 105.057 11.7704 105.516 12.2666ZM73.9844 11.2639C73.8044 12.6427 73.1987 13.8023 72.1671 14.7428C70.9359 15.8822 69.3554 16.4519 67.4259 16.4519C65.4963 16.4519 63.9067 15.8822 62.6571 14.7428C61.4074 13.5852 60.7826 12.1242 60.7826 10.36C60.7826 8.59578 61.4074 7.14397 62.6571 6.00471C63.9067 4.86531 65.4963 4.2956 67.4259 4.2956C69.3554 4.2956 70.9359 4.86531 72.1671 6.00471C73.1977 6.94421 73.8032 8.09632 73.984 9.46089C74.0224 9.75103 74.0415 10.0507 74.0415 10.36C74.0415 10.6711 74.0225 10.9724 73.9844 11.2639ZM67.4259 13.1717C68.1425 13.1717 68.7306 12.9235 69.1901 12.4273C69.6494 11.9312 69.8792 11.2421 69.8792 10.36C69.8792 9.4963 69.6494 8.81637 69.1901 8.32021C68.7306 7.8239 68.1425 7.57588 67.4259 7.57588C66.7091 7.57588 66.1118 7.8239 65.6341 8.32021C65.1746 8.81637 64.945 9.4963 64.945 10.36C64.945 11.2237 65.1746 11.9129 65.6341 12.4273C66.1118 12.9235 66.7091 13.1717 67.4259 13.1717ZM74.3388 8.08347C74.2561 7.84617 74.1593 7.61586 74.0485 7.39255C73.9701 7.23806 73.9293 7.06715 73.9293 6.89381C73.9263 6.18647 73.9263 4.30988 73.9263 4.30988C73.9263 3.94236 74.055 3.62995 74.3122 3.37266C74.588 3.09709 74.9186 2.95916 75.3046 2.95916H77.8407L77.8463 4.52934L77.6177 4.84931C78.4679 4.51035 79.4193 4.34087 80.4717 4.34087C80.526 4.34087 80.5798 4.34129 80.6335 4.34229C82.4898 4.37328 84.0163 4.94255 85.213 6.04997C86.2434 6.98947 86.8491 8.14144 87.0299 9.50573C87.06 9.78972 87.0751 10.0836 87.0751 10.3876C87.0751 10.8088 87.0456 11.2113 86.9865 11.5952C86.7636 12.8491 86.1725 13.9134 85.213 14.7882C84.7472 15.2192 84.2315 15.5687 83.6658 15.8367C82.9807 16.1612 82.2222 16.3661 81.3905 16.4515C81.0935 16.4821 80.7873 16.4972 80.4717 16.4972C79.5908 16.4972 78.7805 16.3785 78.0413 16.141C78.0336 17.3526 78.0336 19.3187 78.0336 19.3187C78.0336 19.6311 77.9234 19.8977 77.7028 20.1182C77.4823 20.3388 77.2159 20.449 76.9035 20.449H73.9263V13.8486C73.9263 13.6754 73.9671 13.5046 74.0452 13.35C74.1582 13.123 74.2566 12.8885 74.3404 12.6465C74.583 11.9467 74.7042 11.1846 74.7042 10.36C74.7042 9.54028 74.5821 8.78154 74.3388 8.08347ZM80.514 7.57631C80.4959 7.57602 80.4776 7.57588 80.4593 7.57588C79.7427 7.57588 79.1454 7.83318 78.6675 8.34776C78.2082 8.84393 77.9785 9.52386 77.9785 10.3876C77.9785 10.926 78.0677 11.393 78.2462 11.7885C78.3557 12.0434 78.5002 12.2714 78.68 12.4727C79.1579 12.9689 79.7551 13.2169 80.4717 13.2169C80.8785 13.2169 81.2439 13.1371 81.5679 12.9772C81.8539 12.8533 82.1092 12.6699 82.3338 12.4273C82.7932 11.9312 83.023 11.2421 83.023 10.36C83.023 9.4963 82.7932 8.81637 82.3338 8.32021C81.8744 7.8239 81.2863 7.57588 80.5697 7.57588C80.551 7.57588 80.5324 7.57602 80.514 7.57631Z"/></g><defs><clipPath id="dpFa"><rect width="46.9124" height="20.449" fill="white"/></clipPath><clipPath id="dpFb"><rect width="68.5643" height="20.449" fill="white" transform="translate(45.7095)"/></clipPath></defs></svg>                                                                                                                                                                       
+        </a>
+        <p>The UAE's deals &amp; coupons platform: deals, coupon codes and store catalogs from merchants across all seven emirates.</p>
+      </div>
+      <div>
+        <h4>For merchants</h4>
+        <ul>
+          <li><a href="#why">Why DealPopup</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#tools">Merchant tools</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>DealPopup</h4>
+        <ul>
+          <li><a href="#">dealpopup.com</a></li>
+          <li><a href="mailto:merchants@dealpopup.com">merchants@dealpopup.com</a></li>
+          <li><a href="#">Advertise with us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 DealPopup. All rights reserved.</span>
+      <span>Design proposal · figures illustrative, to be confirmed</span>
+    </div>
+  </div>
+</footer>
+
+  </div><!-- /#smooth-content -->
+</div><!-- /#smooth-wrapper -->
+
+<!-- ================= Libraries ================= -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollSmoother.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+
+<script>
+/* ============================================================
+   DealPopup — GSAP + Lenis animation layer
+   Structure:
+     1. Smooth scrolling (Lenis <-> ScrollTrigger sync)
+     2. Header state
+     3. Hero entrance + parallax
+     4. Reusable scroll reveals (fade / cards / headline splits)
+     5. Counters & progress bars
+     6. Category marquee
+     7. FAQ accordion
+   All effects respect prefers-reduced-motion.
+   ============================================================ */
+(function(){
+  "use strict";
+  // Always begin from the very top — ignore the browser's restored scroll position on refresh
+  if("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.scrollTo(0, 0);
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hasGSAP = typeof gsap !== "undefined";
+  const hasSmoother = hasGSAP && typeof ScrollSmoother !== "undefined";
+  if(hasGSAP){
+    gsap.registerPlugin(ScrollTrigger);
+    if(typeof ScrollSmoother !== "undefined") gsap.registerPlugin(ScrollSmoother);
+    if(typeof Flip !== "undefined") gsap.registerPlugin(Flip);
+    // Don't re-run every ScrollTrigger calc when the mobile address bar shows/hides (major mobile jank)
+    ScrollTrigger.config({ ignoreMobileResize:true });
+  }
+
+  /* ---------- 1. GSAP ScrollSmoother — premium global smooth scroll ----------
+     All scrollable content lives in #smooth-content (transformed); the fixed header, splash
+     overlay and mini-player are kept OUTSIDE it. smooth:2 = the demo's heavy 2s catch-up glide.
+     Native scroll still drives it, so ScrollTrigger pins, wheel, touch and keyboard all work. */
+  let smoother = null;
+  if(!reduceMotion && hasSmoother){
+    smoother = ScrollSmoother.create({
+      wrapper: "#smooth-wrapper",
+      content: "#smooth-content",
+      smooth: 2,                 // responsive glide (2s was the source of the "laggy/floaty" feel)
+      effects: true,             // data-speed / data-lag parallax attributes
+      normalizeScroll: true,     // unified wheel + touch, no mobile address-bar jump
+      smoothTouch: false         // native momentum scrolling on phones = smooth, no JS-vs-touch fight
+    });
+    // Anchor links glide via the smoother (position clears the fixed header)
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener("click", e=>{
+        const id = a.getAttribute("href");
+        if(id.length > 1 && document.querySelector(id)){
+          e.preventDefault();
+          smoother.scrollTo(id, true, "top 70px");
+        }
+      });
+    });
+  }
+
+  /* ---------- 2. Header: light over video -> solid on scroll ---------- */
+  const header = document.getElementById("siteHeader");
+  const heroVideoSec = document.getElementById("heroVideo");
+  const setHeader = () => {
+    const past = window.scrollY > (heroVideoSec ? heroVideoSec.offsetHeight - 90 : 24);
+    header.classList.toggle("scrolled", window.scrollY > 24);
+    header.classList.toggle("light", !past);
+  };
+  setHeader();
+  window.addEventListener("scroll", setHeader, { passive: true });
+
+  /* ---------- Mini player (PiP) ---------- */
+  const pip = document.getElementById("pip");
+  const pipVideo = pip.querySelector("video");
+  let pipDismissed = false;
+  function showPip(on){
+    if(pipDismissed) on = false;
+    pip.classList.toggle("show", on);
+    if(on){ pipVideo.play().catch(()=>{}); } else { pipVideo.pause(); }
+  }
+  document.getElementById("pipClose").addEventListener("click", e=>{
+    e.stopPropagation(); pipDismissed = true; showPip(false);
+  });
+  /* ---------- Video lightbox: hero button + mini player both open it (plays WITH SOUND) ---------- */
+  const videoModal = document.getElementById("videoModal");
+  const modalVideo = document.getElementById("modalVideo");
+  function openVideoModal(){
+    videoModal.classList.add("open");
+    videoModal.setAttribute("aria-hidden","false");
+    modalVideo.currentTime = 0;
+    modalVideo.muted = false;                       // full sound
+    modalVideo.play().catch(()=>{});
+    if(smoother) smoother.paused(true);             // freeze the page behind the modal
+    document.documentElement.style.overflow = "hidden";
+  }
+  function closeVideoModal(){
+    if(!videoModal.classList.contains("open")) return;
+    videoModal.classList.remove("open");
+    videoModal.setAttribute("aria-hidden","true");
+    modalVideo.pause();
+    if(smoother) smoother.paused(false);
+    document.documentElement.style.overflow = "";
+  }
+  document.getElementById("vmodalClose").addEventListener("click", closeVideoModal);
+  videoModal.addEventListener("click", e=>{ if(e.target === videoModal) closeVideoModal(); });  // click backdrop
+  window.addEventListener("keydown", e=>{ if(e.key === "Escape") closeVideoModal(); });          // Esc
+
+  // Mini player → open the modal (the ✕ still just dismisses the player)
+  pip.addEventListener("click", openVideoModal);
+  // Hero "Why we build DealPopup" button → open the same modal
+  document.getElementById("soundToggle").addEventListener("click", openVideoModal);
+
+  if(!hasGSAP || reduceMotion){
+    // Graceful fallback: no splash, show everything, skip animation
+    const sp = document.getElementById("splashBg");
+    if(sp) sp.style.display = "none";
+    const brandEl = document.getElementById("brandTarget");
+    if(brandEl) brandEl.classList.remove("is-splash");
+    const bw = document.getElementById("spWord");
+    if(bw && !bw.querySelector("svg") && !bw.textContent) bw.textContent = "DealPopup";
+    document.querySelectorAll(".will-reveal").forEach(el=>el.style.opacity=1);
+    document.querySelectorAll(".nav, .header-right, .hv-content > *").forEach(el=>{ el.style.opacity=1; el.style.transform="none"; });
+    window.addEventListener("scroll", ()=>{
+      showPip(window.scrollY > heroVideoSec.offsetHeight);
+    }, { passive:true });
+    initMarquee(true); initFaq(); return;
+  }
+
+  const EASE = "power3.out";
+
+  /* ---------- 3b. Splash intro: leaf spin -> letters -> Flip to navbar (ONE element) ----------
+     There is only ever ONE logo. The header <a class="brand"> starts life centred &
+     enlarged (.is-splash). GSAP Flip records that box, we drop .is-splash so the SAME
+     element returns to its natural navbar slot, then Flip animates the difference. The
+     exact same DOM node moves, resizes and settles into the navbar — no duplicate node,
+     no crossfade, no swap. */
+  (function splashIntro(){
+    const splashBg    = document.getElementById("splashBg");
+    const brand       = document.getElementById("brandTarget");   // the ONE logo — lives in the header
+    const word        = document.getElementById("spWord");
+    const leaf        = brand.querySelector(".sp-leaf");
+    const mark        = brand.querySelector(".mark");            // the green rounded-square box
+    const nav         = document.querySelector(".nav");
+    const headerRight = document.querySelector(".header-right");
+    const heroContent = gsap.utils.toArray(".hv-content > *");
+
+    // Wordmark is the supplied "DealPopup" SVG (fill:currentColor so it follows the header's
+    // light/dark colour states and the splash dark→white transition). It reveals as one piece.
+    word.innerHTML = '<svg class="sp-wordmark" viewBox="0 0 115 21" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#dpHa)"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M0 14.5545V0.937223H7.1671C9.70305 0.937223 11.7521 1.62629 13.3142 3.00457C14.8762 4.36442 15.6572 6.20217 15.6572 8.51767C15.6572 10.8332 14.8762 12.6801 13.3142 14.0583C11.7521 15.4182 9.70305 16.0981 7.1671 16.0981H1.54362C1.12098 16.0981 0.753461 15.9512 0.441054 15.6572C0.147065 15.3447 0 14.9771 0 14.5545ZM4.30017 12.6801H7.00161C8.30636 12.6801 9.34467 12.3125 10.1165 11.5775C10.9067 10.824 11.3018 9.80414 11.3018 8.51767C11.3018 7.21293 10.9067 6.19304 10.1165 5.45785C9.34467 4.72281 8.30636 4.35529 7.00161 4.35529H1.24049L4.30017 6.00928V12.6801ZM28.8472 10.2268C28.8472 10.2819 28.8287 10.6219 28.792 11.2467H20.2467C20.3018 11.412 20.3662 11.5682 20.4396 11.7153C20.9175 12.6709 21.8178 13.1487 23.141 13.1487C24.1518 13.1487 25.0523 12.8087 25.8424 12.1288L27.3861 13.7275C27.57 13.9113 27.6526 14.141 27.6342 14.4167C27.6158 14.674 27.4964 14.8853 27.2758 15.0507C26.21 15.8777 24.7859 16.2912 23.0032 16.2912C20.945 16.2912 19.2819 15.7215 18.0138 14.5821C16.7458 13.4427 16.1118 11.9817 16.1118 10.1992C16.1118 8.435 16.7182 6.98319 17.9312 5.84379C19.1624 4.70439 20.7061 4.13483 22.5622 4.13483C24.3631 4.13483 25.8609 4.68611 27.0554 5.78868C28.2499 6.87297 28.8472 8.35233 28.8472 10.2268ZM20.3293 8.54523C20.2408 8.79339 20.2491 9.09651 20.2491 9.09651H24.9879C24.8777 8.4717 24.6112 7.98481 24.1886 7.63557C23.7658 7.26804 23.233 7.08428 22.5897 7.08428C21.4872 7.08428 20.7337 7.57131 20.3293 8.54523ZM34.8289 4.13483C38.8351 4.13483 40.8381 5.94488 40.8381 9.56512V16.0981H37.9712C37.6957 16.0981 37.4659 16.0063 37.2822 15.8226C37.0984 15.6204 37.0064 15.3815 37.0064 15.1058V14.5821C36.4 15.7215 35.2422 16.2912 33.5333 16.2912C32.155 16.2912 31.0798 15.9512 30.3081 15.2713C29.5362 14.5913 29.1503 13.7184 29.1503 12.6525C29.1503 11.5315 29.5731 10.6678 30.4183 10.0613C31.282 9.4549 32.596 9.15163 34.3603 9.15163H36.5959C36.5959 9.15163 36.6114 8.60035 36.5929 8.54523C36.3174 7.69996 35.5271 7.27718 34.2223 7.27718C33.5424 7.27718 32.8625 7.40583 32.1825 7.66312C31.8333 7.81019 31.4842 7.81933 31.1351 7.69068C30.8043 7.56203 30.5561 7.3323 30.3908 7.00161L29.6464 5.51311C30.3081 5.07205 31.0983 4.73209 32.0171 4.49307C32.9544 4.2542 33.8916 4.13483 34.8289 4.13483ZM34.6909 13.6724C35.7201 13.6724 36.3909 13.2222 36.7033 12.3217V11.3018H34.9391C33.7446 11.3018 33.1473 11.6969 33.1473 12.4872C33.1473 12.8363 33.276 13.1211 33.5333 13.3416C33.8088 13.5622 34.1948 13.6724 34.6909 13.6724ZM41.5481 0H44.5526C44.865 0 45.1223 0.110228 45.3245 0.330684C45.5451 0.551282 45.6553 0.808576 45.6553 1.10256V16.0981H42.5404C42.2648 16.0981 42.0258 16.0063 41.8238 15.8226C41.6399 15.6204 41.5481 15.3815 41.5481 15.1058V0ZM60.0101 0.937223C62.0683 0.937223 63.7039 1.44253 64.9168 2.45328C66.1296 3.44562 66.736 4.80548 66.736 6.533C66.736 8.26038 66.1296 9.62952 64.9168 10.6403C63.7039 11.6326 62.0683 12.1288 60.0101 12.1288H57.3638V14.5545C57.3638 14.9771 57.2076 15.3447 56.8951 15.6572C56.6012 15.9512 56.2336 16.0981 55.7926 16.0981H53.0636V0.937223H60.0101ZM59.7344 8.73827C60.6165 8.73827 61.2781 8.55437 61.7192 8.18685C62.1785 7.80105 62.4083 7.24963 62.4083 6.533C62.4083 5.81623 62.1785 5.26495 61.7192 4.87901C61.2781 4.49307 60.6165 4.30017 59.7344 4.30017H54.6348L57.3638 5.43029V8.73827H59.7344ZM106.155 4.32773V14.8027C106.155 15.1518 106.026 15.455 105.769 15.7123C105.512 15.9696 105.208 16.0981 104.859 16.0981H102.213L103.591 13.0936C102.819 14.233 102.011 15.0507 101.165 15.5468C100.32 16.043 99.5114 16.2912 98.7396 16.2912C97.2143 16.2912 96.0014 15.841 95.101 14.9404C94.2004 14.0399 93.7503 12.6985 93.7503 10.9158V4.35529H96.7824C97.0948 4.35529 97.3521 4.45638 97.5543 4.65856C97.7564 4.86059 97.8575 5.11789 97.8575 5.43029V10.2268C97.8575 11.9175 98.5099 12.7627 99.8146 12.7627C100.476 12.7627 101.009 12.5423 101.414 12.1012C101.818 11.6417 102.02 10.9434 102.02 10.0062V5.73356C102.02 5.34762 102.158 5.0168 102.433 4.74123C102.709 4.46552 103.04 4.32773 103.426 4.32773H106.155ZM114.176 4.13483C115.811 4.13483 117.181 4.69525 118.283 5.81623C119.386 6.91894 119.937 8.38903 119.937 10.2268C119.937 12.0461 119.386 13.5162 118.283 14.6372C117.181 15.7399 115.811 16.2912 114.176 16.2912C112.798 16.2912 111.704 15.8777 110.896 15.0507V19.1579C110.896 19.4704 110.785 19.7368 110.565 19.9574C110.344 20.1778 110.078 20.2882 109.765 20.2882H106.788V5.70601C106.788 5.33848 106.917 5.02608 107.174 4.76878C107.45 4.49307 107.781 4.35529 108.167 4.35529H110.703L108.69 7.19451C110.51 5.15472 112.338 4.13483 114.176 4.13483ZM111.53 12.2666C112.007 12.7627 112.605 13.0109 113.321 13.0109C114.038 13.0109 114.626 12.7627 115.085 12.2666C115.545 11.7704 115.775 11.0905 115.775 10.2268C115.775 9.36309 115.545 8.68301 115.085 8.18685C114.626 7.6724 114.038 7.41511 113.321 7.41511C112.605 7.41511 112.007 7.6724 111.53 8.18685C111.07 8.68301 110.84 9.36309 110.84 10.2268C110.84 11.0905 111.07 11.7704 111.53 12.2666ZM79.9976 11.2639C79.8176 12.6427 79.2119 13.8023 78.1803 14.7428C76.9491 15.8822 75.3686 16.4519 73.439 16.4519C71.5095 16.4519 69.9199 15.8822 68.6703 14.7428C67.4206 13.5852 66.7958 12.1242 66.7958 10.36C66.7958 8.59578 67.4206 7.14397 68.6703 6.00471C69.9199 4.86531 71.5095 4.2956 73.439 4.2956C75.3686 4.2956 76.9491 4.86531 78.1803 6.00471C79.2109 6.94421 79.8164 8.09632 79.9972 9.46089C80.0356 9.75103 80.0547 10.0507 80.0547 10.36C80.0547 10.6711 80.0357 10.9724 79.9976 11.2639ZM73.439 13.1717C74.1557 13.1717 74.7438 12.9235 75.2033 12.4273C75.6626 11.9312 75.8923 11.2421 75.8923 10.36C75.8923 9.4963 75.6626 8.81637 75.2033 8.32021C74.7438 7.8239 74.1557 7.57588 73.439 7.57588C72.7223 7.57588 72.125 7.8239 71.6473 8.32021C71.1878 8.81637 70.9582 9.4963 70.9582 10.36C70.9582 11.2237 71.1878 11.9129 71.6473 12.4273C72.125 12.9235 72.7223 13.1717 73.439 13.1717ZM80.352 8.08347C80.2693 7.84617 80.1725 7.61586 80.0617 7.39255C79.9833 7.23806 79.9425 7.06715 79.9425 6.89381C79.9395 6.18647 79.9395 4.30988 79.9395 4.30988C79.9395 3.94236 80.0681 3.62995 80.3254 3.37266C80.6011 3.09709 80.9318 2.95916 81.3178 2.95916H83.8539L83.8594 4.52934L83.6308 4.84931C84.4811 4.51035 85.4325 4.34087 86.4849 4.34087C86.5392 4.34087 86.593 4.34129 86.6467 4.34229C88.503 4.37328 90.0295 4.94255 91.2262 6.04997C92.2566 6.98947 92.8623 8.14144 93.043 9.50573C93.0732 9.78972 93.0883 10.0836 93.0883 10.3876C93.0883 10.8088 93.0588 11.2113 92.9996 11.5952C92.7768 12.8491 92.1856 13.9134 91.2262 14.7882C90.7604 15.2192 90.2447 15.5687 89.679 15.8367C88.9939 16.1612 88.2354 16.3661 87.4037 16.4515C87.1067 16.4821 86.8005 16.4972 86.4849 16.4972C85.604 16.4972 84.7937 16.3785 84.0545 16.141C84.0468 17.3526 84.0468 19.3187 84.0468 19.3187C84.0468 19.6311 83.9365 19.8977 83.7159 20.1182C83.4955 20.3388 83.2291 20.449 82.9166 20.449H79.9395V13.8486C79.9395 13.6754 79.9803 13.5046 80.0584 13.35C80.1714 13.123 80.2698 12.8885 80.3536 12.6465C80.5962 11.9467 80.7174 11.1846 80.7174 10.36C80.7174 9.54028 80.5953 8.78154 80.352 8.08347ZM86.5272 7.57631C86.509 7.57602 86.4908 7.57588 86.4725 7.57588C85.7559 7.57588 85.1586 7.83318 84.6807 8.34776C84.2214 8.84393 83.9917 9.52386 83.9917 10.3876C83.9917 10.926 84.0809 11.393 84.2594 11.7885C84.3689 12.0434 84.5134 12.2714 84.6931 12.4727C85.171 12.9689 85.7683 13.2169 86.4849 13.2169C86.8917 13.2169 87.2571 13.1371 87.5811 12.9772C87.867 12.8533 88.1223 12.6699 88.3469 12.4273C88.8064 11.9312 89.0362 11.2421 89.0362 10.36C89.0362 9.4963 88.8064 8.81637 88.3469 8.32021C87.8876 7.8239 87.2995 7.57588 86.5829 7.57588C86.5642 7.57588 86.5456 7.57602 86.5272 7.57631Z"/></g><g clip-path="url(#dpHb)"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M-6.01318 14.5545V0.937223H1.15391C3.68987 0.937223 5.73894 1.62629 7.30097 3.00457C8.86301 4.36442 9.64403 6.20217 9.64403 8.51767C9.64403 10.8332 8.86301 12.6801 7.30097 14.0583C5.73894 15.4182 3.68987 16.0981 1.15391 16.0981H-4.46956C-4.8922 16.0981 -5.25972 15.9512 -5.57213 15.6572C-5.86612 15.3447 -6.01318 14.9771 -6.01318 14.5545ZM-1.71301 12.6801H0.98843C2.29317 12.6801 3.33148 12.3125 4.10337 11.5775C4.89352 10.824 5.2886 9.80414 5.2886 8.51767C5.2886 7.21293 4.89352 6.19304 4.10337 5.45785C3.33148 4.72281 2.29317 4.35529 0.98843 4.35529H-4.77269L-1.71301 6.00928V12.6801ZM22.834 10.2268C22.834 10.2819 22.8155 10.6219 22.7789 11.2467H14.2335C14.2886 11.412 14.353 11.5682 14.4264 11.7153C14.9043 12.6709 15.8047 13.1487 17.1278 13.1487C18.1386 13.1487 19.0391 12.8087 19.8293 12.1288L21.3729 13.7275C21.5568 13.9113 21.6395 14.141 21.621 14.4167C21.6026 14.674 21.4832 14.8853 21.2627 15.0507C20.1968 15.8777 18.7727 16.2912 16.99 16.2912C14.9318 16.2912 13.2687 15.7215 12.0007 14.5821C10.7326 13.4427 10.0986 11.9817 10.0986 10.1992C10.0986 8.435 10.705 6.98319 11.918 5.84379C13.1492 4.70439 14.693 4.13483 16.549 4.13483C18.3499 4.13483 19.8477 4.68611 21.0422 5.78868C22.2367 6.87297 22.834 8.35233 22.834 10.2268ZM14.3162 8.54523C14.2276 8.79339 14.2359 9.09651 14.2359 9.09651H18.9747C18.8645 8.4717 18.598 7.98481 18.1754 7.63557C17.7526 7.26804 17.2198 7.08428 16.5765 7.08428C15.474 7.08428 14.7205 7.57131 14.3162 8.54523ZM28.8157 4.13483C32.8219 4.13483 34.825 5.94488 34.825 9.56512V16.0981H31.958C31.6825 16.0981 31.4527 16.0063 31.269 15.8226C31.0852 15.6204 30.9933 15.3815 30.9933 15.1058V14.5821C30.3869 15.7215 29.229 16.2912 27.5201 16.2912C26.1418 16.2912 25.0667 15.9512 24.2949 15.2713C23.523 14.5913 23.1371 13.7184 23.1371 12.6525C23.1371 11.5315 23.5599 10.6678 24.4051 10.0613C25.2688 9.4549 26.5829 9.15163 28.3471 9.15163H30.5828C30.5828 9.15163 30.5982 8.60035 30.5798 8.54523C30.3042 7.69996 29.5139 7.27718 28.2092 7.27718C27.5292 7.27718 26.8493 7.40583 26.1694 7.66312C25.8201 7.81019 25.471 7.81933 25.1219 7.69068C24.7911 7.56203 24.5429 7.3323 24.3776 7.00161L23.6333 5.51311C24.2949 5.07205 25.0851 4.73209 26.0039 4.49307C26.9412 4.2542 27.8785 4.13483 28.8157 4.13483ZM28.6778 13.6724C29.7069 13.6724 30.3777 13.2222 30.6901 12.3217V11.3018H28.9259C27.7314 11.3018 27.1341 11.6969 27.1341 12.4872C27.1341 12.8363 27.2628 13.1211 27.5201 13.3416C27.7957 13.5622 28.1816 13.6724 28.6778 13.6724ZM35.5349 0H38.5394C38.8519 0 39.1091 0.110228 39.3113 0.330684C39.5319 0.551282 39.6422 0.808576 39.6422 1.10256V16.0981H36.5272C36.2516 16.0981 36.0126 16.0063 35.8106 15.8226C35.6267 15.6204 35.5349 15.3815 35.5349 15.1058V0ZM53.9969 0.937223C56.0551 0.937223 57.6907 1.44253 58.9036 2.45328C60.1164 3.44562 60.7228 4.80548 60.7228 6.533C60.7228 8.26038 60.1164 9.62952 58.9036 10.6403C57.6907 11.6326 56.0551 12.1288 53.9969 12.1288H51.3506V14.5545C51.3506 14.9771 51.1944 15.3447 50.882 15.6572C50.588 15.9512 50.2205 16.0981 49.7794 16.0981H47.0504V0.937223H53.9969ZM53.7212 8.73827C54.6033 8.73827 55.265 8.55437 55.706 8.18685C56.1653 7.80105 56.3951 7.24963 56.3951 6.533C56.3951 5.81623 56.1653 5.26495 55.706 4.87901C55.265 4.49307 54.6033 4.30017 53.7212 4.30017H48.6216L51.3506 5.43029V8.73827H53.7212ZM100.142 4.32773V14.8027C100.142 15.1518 100.013 15.455 99.7556 15.7123C99.4983 15.9696 99.1951 16.0981 98.8459 16.0981H96.1996L97.5779 13.0936C96.8062 14.233 95.9974 15.0507 95.1522 15.5468C94.3068 16.043 93.4982 16.2912 92.7264 16.2912C91.2011 16.2912 89.9882 15.841 89.0878 14.9404C88.1873 14.0399 87.7371 12.6985 87.7371 10.9158V4.35529H90.7692C91.0816 4.35529 91.3389 4.45638 91.5411 4.65856C91.7432 4.86059 91.8443 5.11789 91.8443 5.43029V10.2268C91.8443 11.9175 92.4967 12.7627 93.8015 12.7627C94.463 12.7627 94.996 12.5423 95.4003 12.1012C95.8046 11.6417 96.0067 10.9434 96.0067 10.0062V5.73356C96.0067 5.34762 96.1445 5.0168 96.4202 4.74123C96.6958 4.46552 97.0266 4.32773 97.4126 4.32773H100.142ZM108.163 4.13483C109.798 4.13483 111.167 4.69525 112.27 5.81623C113.373 6.91894 113.924 8.38903 113.924 10.2268C113.924 12.0461 113.373 13.5162 112.27 14.6372C111.167 15.7399 109.798 16.2912 108.163 16.2912C106.785 16.2912 105.691 15.8777 104.882 15.0507V19.1579C104.882 19.4704 104.772 19.7368 104.552 19.9574C104.331 20.1778 104.065 20.2882 103.752 20.2882H100.775V5.70601C100.775 5.33848 100.904 5.02608 101.161 4.76878C101.437 4.49307 101.768 4.35529 102.154 4.35529H104.689L102.677 7.19451C104.497 5.15472 106.325 4.13483 108.163 4.13483ZM105.516 12.2666C105.994 12.7627 106.591 13.0109 107.308 13.0109C108.025 13.0109 108.613 12.7627 109.072 12.2666C109.532 11.7704 109.762 11.0905 109.762 10.2268C109.762 9.36309 109.532 8.68301 109.072 8.18685C108.613 7.6724 108.025 7.41511 107.308 7.41511C106.591 7.41511 105.994 7.6724 105.516 8.18685C105.057 8.68301 104.827 9.36309 104.827 10.2268C104.827 11.0905 105.057 11.7704 105.516 12.2666ZM73.9844 11.2639C73.8044 12.6427 73.1987 13.8023 72.1671 14.7428C70.9359 15.8822 69.3554 16.4519 67.4259 16.4519C65.4963 16.4519 63.9067 15.8822 62.6571 14.7428C61.4074 13.5852 60.7826 12.1242 60.7826 10.36C60.7826 8.59578 61.4074 7.14397 62.6571 6.00471C63.9067 4.86531 65.4963 4.2956 67.4259 4.2956C69.3554 4.2956 70.9359 4.86531 72.1671 6.00471C73.1977 6.94421 73.8032 8.09632 73.984 9.46089C74.0224 9.75103 74.0415 10.0507 74.0415 10.36C74.0415 10.6711 74.0225 10.9724 73.9844 11.2639ZM67.4259 13.1717C68.1425 13.1717 68.7306 12.9235 69.1901 12.4273C69.6494 11.9312 69.8792 11.2421 69.8792 10.36C69.8792 9.4963 69.6494 8.81637 69.1901 8.32021C68.7306 7.8239 68.1425 7.57588 67.4259 7.57588C66.7091 7.57588 66.1118 7.8239 65.6341 8.32021C65.1746 8.81637 64.945 9.4963 64.945 10.36C64.945 11.2237 65.1746 11.9129 65.6341 12.4273C66.1118 12.9235 66.7091 13.1717 67.4259 13.1717ZM74.3388 8.08347C74.2561 7.84617 74.1593 7.61586 74.0485 7.39255C73.9701 7.23806 73.9293 7.06715 73.9293 6.89381C73.9263 6.18647 73.9263 4.30988 73.9263 4.30988C73.9263 3.94236 74.055 3.62995 74.3122 3.37266C74.588 3.09709 74.9186 2.95916 75.3046 2.95916H77.8407L77.8463 4.52934L77.6177 4.84931C78.4679 4.51035 79.4193 4.34087 80.4717 4.34087C80.526 4.34087 80.5798 4.34129 80.6335 4.34229C82.4898 4.37328 84.0163 4.94255 85.213 6.04997C86.2434 6.98947 86.8491 8.14144 87.0299 9.50573C87.06 9.78972 87.0751 10.0836 87.0751 10.3876C87.0751 10.8088 87.0456 11.2113 86.9865 11.5952C86.7636 12.8491 86.1725 13.9134 85.213 14.7882C84.7472 15.2192 84.2315 15.5687 83.6658 15.8367C82.9807 16.1612 82.2222 16.3661 81.3905 16.4515C81.0935 16.4821 80.7873 16.4972 80.4717 16.4972C79.5908 16.4972 78.7805 16.3785 78.0413 16.141C78.0336 17.3526 78.0336 19.3187 78.0336 19.3187C78.0336 19.6311 77.9234 19.8977 77.7028 20.1182C77.4823 20.3388 77.2159 20.449 76.9035 20.449H73.9263V13.8486C73.9263 13.6754 73.9671 13.5046 74.0452 13.35C74.1582 13.123 74.2566 12.8885 74.3404 12.6465C74.583 11.9467 74.7042 11.1846 74.7042 10.36C74.7042 9.54028 74.5821 8.78154 74.3388 8.08347ZM80.514 7.57631C80.4959 7.57602 80.4776 7.57588 80.4593 7.57588C79.7427 7.57588 79.1454 7.83318 78.6675 8.34776C78.2082 8.84393 77.9785 9.52386 77.9785 10.3876C77.9785 10.926 78.0677 11.393 78.2462 11.7885C78.3557 12.0434 78.5002 12.2714 78.68 12.4727C79.1579 12.9689 79.7551 13.2169 80.4717 13.2169C80.8785 13.2169 81.2439 13.1371 81.5679 12.9772C81.8539 12.8533 82.1092 12.6699 82.3338 12.4273C82.7932 11.9312 83.023 11.2421 83.023 10.36C83.023 9.4963 82.7932 8.81637 82.3338 8.32021C81.8744 7.8239 81.2863 7.57588 80.5697 7.57588C80.551 7.57588 80.5324 7.57602 80.514 7.57631Z"/></g><defs><clipPath id="dpHa"><rect width="46.9124" height="20.449" fill="white"/></clipPath><clipPath id="dpHb"><rect width="68.5643" height="20.449" fill="white" transform="translate(45.7095)"/></clipPath></defs></svg>';
+    const letters = word.querySelectorAll(".sp-wordmark");
+
+    // On refresh, don't let the browser restore the old scroll position — the intro must
+    // start from the WINDOW CENTRE at the top of the page, then flip up into the header.
+    if("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+
+    // Freeze the page + set starting states while the intro plays
+    if(smoother){ smoother.scrollTo(0, false); smoother.paused(true); }
+    document.documentElement.style.overflow = "hidden";
+    gsap.set(nav,         { opacity:0 });
+    gsap.set(headerRight, { opacity:0 });
+    gsap.set(heroContent, { opacity:0, y:40 });
+    gsap.set(letters,     { opacity:0, y:30, scale:0.9, rotate:2, filter:"blur(8px)",
+                            clipPath:"inset(-20% 100% -20% 0)", transformOrigin:"left center" });  // hidden, ready to wipe left→right
+    gsap.set(brand,       { xPercent:-50, yPercent:-50 });          // GSAP-managed centring offset (Flip-safe; pairs with top:50vh/left:50vw)
+    gsap.set(leaf,        { transformOrigin:"50% 50%", x:0 });      // leaf starts CENTRED — the box pops in as the exact header logo mark
+    gsap.set(mark,        { overflow:"hidden",                      // green box ALWAYS clips — leaf only shows inside it
+                            scale:0, opacity:0, rotate:-15,         // box itself pops in: scale 0 / invisible / tilted -15°
+                            transformOrigin:"50% 50%" });
+
+    // Idempotent teardown + safety net so the page can never stay stuck behind the splash
+    let done = false;
+    function finish(){
+      if(done) return; done = true;
+      brand.classList.remove("is-splash");
+      gsap.set(brand,       { clearProps:"transform,opacity,visibility" });
+      gsap.set(leaf,        { clearProps:"transform,x,y,rotation,scale" });  // leaf re-centres via CSS grid — no right-edge drift
+      gsap.set(mark,        { clearProps:"overflow,transform,opacity" });    // restore box's natural clipping + drop pop-in transform
+      gsap.set(letters,     { clearProps:"transform,opacity,scale,color,filter,clipPath,rotate" });
+      gsap.set(nav,         { opacity:1 });
+      gsap.set(headerRight, { opacity:1 });
+      gsap.set(heroContent, { opacity:1, y:0 });
+      if(splashBg && splashBg.parentNode) splashBg.remove();
+      document.documentElement.style.overflow = "";
+      if(smoother) smoother.paused(false);
+      // Land at the very TOP once the intro is done. Recompute triggers first (the pinned
+      // "How it works" section changes the page height), THEN re-assert scroll 0 so nothing
+      // yanks the page down to a restored/stale position.
+      if(typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+      window.scrollTo(0, 0);
+      if(smoother) smoother.scrollTo(0, false);
+    }
+    const safety = setTimeout(finish, 8000);
+
+    const tl = gsap.timeline({ paused:true, defaults:{ ease:"power3.out" } });
+
+    // Step 0 — the green box itself pops in: scale 0 -> 1, fades in, un-tilts from -15°
+    tl.to(mark, { scale:1, opacity:1, rotate:0, duration:.7, ease:"back.out(1.7)" });
+
+    // Step 1 — leaf motion, green box stays static & ALWAYS clips (overflow hidden):
+    //   (1) leaf starts CENTRED (the real logo) and slides OUT the right
+    //   (2) a "new" leaf enters from the LEFT and settles dead CENTRE (snap back off-screen = fresh leaf)
+    //   (3) spin at centre
+    tl.to(leaf, { x:64,  duration:.45, ease:"power1.inOut" }, "+=.1")         // first pass: centre -> out the right (fast)
+      .set(leaf,{ x:-64 })                                                   // snap back off-screen left (unseen) = a NEW leaf
+      .to(leaf, { x:0,   duration:.5,  ease:"power2.out" })                  // new leaf comes from the LEFT to dead centre
+      .to(leaf, { rotate:360, scale:1.1, duration:.5, ease:"power2.inOut" }) // quick spin at centre
+      .to(leaf, { scale:1, duration:.25, ease:"power2.out" }, "<70%")        // settle the pulse
+      .set(leaf,{ x:0, y:0, rotation:0 });                                   // ENDING: lock the leaf dead-centre & upright
+
+    // Step 2 — wordmark reveal: same premium left→right clip-wipe as the footer logo
+    //   (opacity/y/scale/rotate/blur + clip-path wipe), power4.out.
+    tl.to(letters, { opacity:1, y:0, scale:1, rotate:0, filter:"blur(0px)",
+                     clipPath:"inset(-20% 0% -20% 0)", duration:.8, ease:"power4.out" }, "-=.25");
+
+    // Step 3 — no hold: the finished logo flies straight up into the navbar
+
+    // Step 4 — SHARED-ELEMENT TRANSITION (GSAP Flip) on the SAME element
+    // starts a beat before the wordmark wipe fully settles, so there's zero dead time
+    tl.add(()=>{
+      // Make sure the page BEHIND the splash is pinned to the very top BEFORE the white
+      // cover fades, so the revealed content is the hero — never a scrolled-down section.
+      if(typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+      window.scrollTo(0, 0);
+      if(smoother) smoother.scrollTo(0, false);
+      if(typeof Flip !== "undefined"){
+        const state = Flip.getState(brand);            // where the logo is now (centred in the WINDOW, enlarged)
+        gsap.set(brand, { clearProps:"transform" });   // drop the centring offset so the SAME element sits in its natural slot
+        brand.classList.remove("is-splash");           // same element returns to its navbar slot (nav lays out correctly NOW)
+        gsap.set(letters, { color:"#1B2537" });        // hold dark for a beat before crossing to white
+        // No `absolute:true` — the element stays in the header flex flow, so the nav keeps
+        // its final position and can't overlap the logo. Flip animates via transform only.
+        Flip.from(state, {                             // animate that same element to its new home
+          duration:1.0, ease:"power4.inOut", scale:true,
+          onComplete(){ gsap.set(letters, { clearProps:"color" }); clearTimeout(safety); finish(); }
+        });
+      } else {
+        // Fallback if the Flip plugin didn't load — still the same single element, rect math
+        const from = brand.getBoundingClientRect();
+        gsap.set(brand, { clearProps:"transform" });   // drop the centring offset before measuring the natural slot
+        brand.classList.remove("is-splash");
+        const to = brand.getBoundingClientRect();
+        gsap.set(brand,   { position:"fixed", zIndex:320, margin:0, transformOrigin:"top left",
+                            top:from.top, left:from.left, width:from.width, height:from.height });
+        gsap.set(letters, { color:"#1B2537" });
+        gsap.to(brand, { top:to.top, left:to.left, scale:to.height/from.height, duration:1.25, ease:"expo.inOut",
+          onComplete(){ gsap.set(brand,{clearProps:"position,zIndex,margin,top,left,width,height,transform"});
+                        gsap.set(letters,{clearProps:"color"}); clearTimeout(safety); finish(); } });
+      }
+      // Word crosses dark→white as it lands on the film header (separate colour channel)
+      gsap.to(letters, { color:"#fff", duration:.6, ease:"power2.inOut", delay:.25 });
+
+      // EVERYTHING rides the SAME 1.0s power4.inOut curve as the Flip flight, so the white
+      // cover dissolve, header chrome and hero content all land in the exact moment the
+      // logo docks — one synchronised move, not a page appearing behind a flying logo.
+      gsap.to(splashBg,     { autoAlpha:0, duration:1.0, ease:"power4.inOut" });
+      gsap.to(nav,          { opacity:1, duration:.45, ease:"power2.out", delay:.55 });
+      gsap.to(headerRight,  { opacity:1, duration:.45, ease:"power2.out", delay:.55 });
+      gsap.to(heroContent,  { opacity:1, y:0, stagger:.06, duration:.7, ease:"power3.out", delay:.35 });
+    }, "-=.15");
+
+    // Launch the intro only once the webfont is READY, so the wordmark already has its final
+    // width and the centred logo can't jump sideways when the font swaps in or when GSAP finishes
+    // loading. The logo is hidden (CSS visibility:hidden) until this moment, then revealed & played.
+    let launched = false;
+    const launch = ()=>{
+      if(launched) return; launched = true;
+      gsap.set(brand, { autoAlpha:1 });   // reveal the already-centred logo at its final width
+      tl.play();
+    };
+    if(document.fonts && document.fonts.ready){ document.fonts.ready.then(launch); }
+    setTimeout(launch, 1200);             // safety: never wait on fonts forever
+  })();
+
+  /* Immersive → card: the full-bleed hero shrinks into a centred floating card over the
+     first ~460px of scroll. 100vw→min(90vw,1500px), 100vh→75vh, radius 0→32, margin-top 0→60. */
+  gsap.timeline({
+    scrollTrigger:{ trigger:"#heroVideo", start:"top top", end:"bottom bottom", scrub:true, invalidateOnRefresh:true,
+                    pin:".hv-sticky", pinSpacing:false, anticipatePin:1 }   // pin replaces the old position:sticky
+  })
+  // GPU-only shrink: clip a centred rounded card out of the full-bleed video (no width/height = no reflow).
+  .fromTo("#hvMedia",
+    { clipPath:"inset(0px 0px 0px 0px round 0px)", filter:"drop-shadow(0 0px 0px rgba(6,15,10,0))" },
+    { clipPath:()=>{
+        const w = window.innerWidth, h = window.innerHeight;
+        const cardW = Math.min(w * 0.9, 1500), sx = Math.max(0, (w - cardW) / 2);
+        const top = 60, bottom = Math.max(0, h - 60 - h * 0.75);   // 75vh card, 60px from the top
+        return `inset(${top}px ${sx}px ${bottom}px ${sx}px round 32px)`;
+      },
+      filter:"drop-shadow(0 18px 30px rgba(6,15,10,.26))", ease:"none" }, 0)   // smaller blur = far cheaper per scroll frame
+  .fromTo("#hvVideo", { scale:1 }, { scale:1.06, ease:"none" }, 0)   // subtle push-in = depth as it docks into a card
+  .to(".hv-scrollcue", { autoAlpha:0, ease:"none" }, 0);
+
+  /* Mini player appears once the film has left the viewport */
+  ScrollTrigger.create({
+    trigger:"#heroVideo", start:"bottom 30%",
+    onEnter: ()=> showPip(true),
+    onLeaveBack: ()=> showPip(false)
+  });
+
+  /* Pause the big film when off-screen (performance) */
+  const hv = document.getElementById("hvVideo");
+  ScrollTrigger.create({
+    trigger:"#heroVideo", start:"top bottom", end:"bottom top",
+    onLeave: ()=> hv.pause(),
+    onEnterBack: ()=> hv.play().catch(()=>{})
+  });
+
+  /* ---------- Showcase (phones) entrance + parallax ---------- */
+  gsap.from("#heroStage", {
+    autoAlpha:0, scale:.93, y:60, duration:1.1, ease:"power4.out",
+    scrollTrigger:{ trigger:".showcase", start:"top 70%" }
+  });
+  gsap.from(".badge-float, .coupon-float", {
+    scale:0, autoAlpha:0, duration:.6, ease:"back.out(2)", stagger:.12,
+    scrollTrigger:{ trigger:".showcase", start:"top 60%" }
+  });
+  gsap.from("#heroToast", {
+    y:24, autoAlpha:0, duration:.7, ease:EASE,
+    scrollTrigger:{ trigger:".showcase", start:"top 55%" }
+  });
+  // Ambient float on badges
+  document.querySelectorAll(".badge-float, .coupon-float").forEach((b,i)=>{
+    gsap.to(b, { y:"+=10", duration:2.4+i*.4, yoyo:true, repeat:-1, ease:"sine.inOut" });
+  });
+  gsap.to("#heroToast", { y:-6, duration:2.8, yoyo:true, repeat:-1, ease:"sine.inOut" });
+  // Depth parallax through the section
+  gsap.to("#heroStage", {
+    yPercent:-6, ease:"none",
+    scrollTrigger:{ trigger:".showcase", start:"top bottom", end:"bottom top", scrub:true }
+  });
+  document.querySelectorAll("[data-parallax]").forEach(el=>{
+    gsap.to(el, {
+      y: parseFloat(el.dataset.parallax), ease:"none",
+      scrollTrigger:{ trigger:".showcase", start:"top bottom", end:"bottom top", scrub:true }
+    });
+  });
+
+  /* ---------- 4. Reusable scroll reveals ---------- */
+  // Headline split: reveal line-by-line using masked lines
+  document.querySelectorAll("h2.split").forEach(h=>{
+    // Wrap words so lines can animate without changing layout
+    const words = h.textContent.trim().split(/\s+/);
+    h.innerHTML = words.map(w=>`<span style="display:inline-block;overflow:hidden;vertical-align:top"><span class="w" style="display:inline-block">${w}</span></span>`).join(" ");
+    gsap.from(h.querySelectorAll(".w"), {
+      yPercent:110, duration:.85, ease:EASE, stagger:.045,
+      scrollTrigger:{ trigger:h, start:"top 85%" }
+    });
+  });
+
+  // Simple fade-up elements
+  gsap.utils.toArray("[data-fade]").forEach(el=>{
+    gsap.fromTo(el, { autoAlpha:0, y:24 }, {
+      autoAlpha:1, y:0, duration:.8, ease:EASE,
+      scrollTrigger:{ trigger:el, start:"top 88%" }
+    });
+  });
+
+  // Cards: staggered per section container
+  const cardGroups = new Map();
+  gsap.utils.toArray("[data-card]").forEach(el=>{
+    const key = el.closest("section") || document.body;
+    if(!cardGroups.has(key)) cardGroups.set(key, []);
+    cardGroups.get(key).push(el);
+  });
+  cardGroups.forEach(cards=>{
+    gsap.fromTo(cards, { autoAlpha:0, y:44, scale:.97 }, {
+      autoAlpha:1, y:0, scale:1, duration:.9, ease:EASE, stagger:.12,
+      scrollTrigger:{ trigger:cards[0], start:"top 86%" }
+    });
+  });
+
+  /* ---------- "How it works" — pinned 3D card reveal (Apple/Linear-style) ----------
+     The section pins at viewport centre; the page can't advance until all four cards
+     have rotated in. Each card rotates in from the left on the Y-axis, one per scroll
+     step, and locks in place while the next animates. Everything is scrubbed, so
+     reverse-scroll rewinds the cards out in reverse order just as smoothly. */
+  (function stepsReveal(){
+    const section = document.getElementById("how");
+    const cards = gsap.utils.toArray("#how .step");
+    if(!section || !cards.length) return;
+
+    const HIDDEN = { opacity:0, y:80, scale:0.9, rotateX:8, filter:"blur(12px)",
+                     transformOrigin:"center center", transformPerspective:1000,
+                     boxShadow:"0 10px 30px rgba(15,27,20,0)" };
+    const SHOWN  = { opacity:1, y:0, scale:1, rotateX:0, filter:"blur(0px)",
+                     boxShadow:"0 18px 40px rgba(15,27,20,.14)", ease:"power4.out" };
+
+    // Different behaviour per breakpoint (matchMedia auto-reverts/rebuilds on resize).
+    gsap.matchMedia().add(
+      { isDesktop:"(min-width: 641px)", isMobile:"(max-width: 640px)" },
+      (ctx)=>{
+        gsap.set(cards, HIDDEN);
+
+        if(ctx.conditions.isDesktop){
+          // Desktop: cards are side-by-side in ONE viewport — pin the section and scrub one card in per step.
+          const tl = gsap.timeline({
+            scrollTrigger:{ trigger:section, start:"center center", end:"+=2500",
+                            pin:true, scrub:1, anticipatePin:1, invalidateOnRefresh:true }
+          });
+          cards.forEach((card, i)=> tl.to(card, { ...SHOWN, duration:1 }, i));
+          tl.to({}, { duration:0.5 });
+        } else {
+          // Mobile: cards STACK vertically (taller than the screen) — NO pin. Each card reveals
+          // with the same premium animation as it scrolls into view, so card 4 is always seen.
+          cards.forEach(card=>{
+            gsap.to(card, { ...SHOWN, duration:0.8,
+              scrollTrigger:{ trigger:card, start:"top 85%", toggleActions:"play none none reverse" } });
+          });
+        }
+      }
+    );
+  })();
+
+  // CTA band: reveal-mask style entrance + floating offers panel
+  gsap.fromTo("[data-band]",
+    { autoAlpha:0, y:60, clipPath:"inset(8% 4% 8% 4% round 28px)" },
+    { autoAlpha:1, y:0, clipPath:"inset(0% 0% 0% 0% round 28px)", duration:1.1, ease:"power4.out",
+      scrollTrigger:{ trigger:"[data-band]", start:"top 82%" } });
+  gsap.to("[data-panel]", {
+    y:-24, ease:"none",
+    scrollTrigger:{ trigger:"[data-band]", start:"top bottom", end:"bottom top", scrub:true }
+  });
+
+  // Dark audience section: soft background parallax on the watermark
+  gsap.to(".audience::after", {}); // noop guard
+  gsap.fromTo(".audience", { backgroundPosition:"50% 0" }, {
+    scrollTrigger:{ trigger:".audience", start:"top bottom", end:"bottom top", scrub:true }
+  });
+
+  /* ---------- Footer logo: premium "letters appear left→right" reveal of the DealPopup wordmark ----------
+     The wordmark is ONE SVG path, so it can't be split into per-letter spans. A left→right clip-path
+     wipe + blur/scale/rise/rotate reveals the glyphs one-by-one for the same elegant, premium effect —
+     while preserving the exact SVG typography. Plays on scroll-in, reverses on scroll-out. */
+  (function footerWordmarkReveal(){
+    const mark = document.querySelector(".footer .brand .sp-wordmark");
+    if(!mark) return;
+    gsap.set(mark, {
+      clipPath:"inset(-20% 100% -20% 0)",   // fully hidden from the right (‑20% top/bottom = no glyph clipping)
+      opacity:0, y:30, scale:0.9, rotate:2, filter:"blur(8px)",
+      transformOrigin:"left center", willChange:"transform,opacity,filter,clip-path"
+    });
+    gsap.to(mark, {
+      clipPath:"inset(-20% 0% -20% 0)",     // wipe open left→right
+      opacity:1, y:0, scale:1, rotate:0, filter:"blur(0px)",
+      duration:1.1, ease:"power4.out",
+      scrollTrigger:{ trigger:".footer .brand", start:"top 80%", toggleActions:"play none none reverse" }
+    });
+  })();
+
+  /* ---------- 5. Counters & progress bars ---------- */
+  gsap.utils.toArray("[data-count]").forEach(el=>{
+    const target = parseFloat(el.dataset.count);
+    const div = parseFloat(el.dataset.div || 1);
+    const suffix = el.dataset.suffix || "";
+    const obj = { v:0 };
+    gsap.to(obj, {
+      v: target, duration:1.6, ease:"power2.out",
+      scrollTrigger:{ trigger:el, start:"top 90%" },
+      onUpdate(){
+        const val = obj.v / div;
+        el.textContent = (div>1 ? val.toFixed(1) : Math.round(val).toLocaleString()) + suffix;
+      }
+    });
+  });
+  gsap.utils.toArray("[data-bar]").forEach(bar=>{
+    gsap.to(bar, {
+      width: bar.dataset.bar + "%", duration:1.4, ease:"power3.inOut",
+      scrollTrigger:{ trigger:bar, start:"top 92%" }
+    });
+  });
+
+  /* ---------- 6 & 7 ---------- */
+  initMarquee(false);
+  initFaq();
+
+  /* ---------- Category marquee (infinite, GSAP-driven) ---------- */
+  function initMarquee(staticOnly){
+    const cats = [
+      ["📱","Electronics"],["🍽","Dining"],["🛒","Grocery"],["💆","Beauty & Spa"],
+      ["✈️","Travel"],["🛋","Home & Living"],["🎬","Entertainment"],["🧸","Kids & Toys"],
+      ["❤️","Health"],["👗","Fashion"],["⚽","Sports"],["🚗","Automotive"]
+    ];
+    const track = document.getElementById("marqueeTrack");
+    const makeSet = () => cats.map(([e,n])=>`<span class="cat-pill"><span class="ico">${e}</span>${n}</span>`).join("");
+    track.innerHTML = makeSet() + makeSet(); // duplicate for seamless loop
+    if(staticOnly || !hasGSAP || reduceMotion) return;
+    const half = track.scrollWidth / 2;
+    gsap.to(track, { x:-half, duration:38, ease:"none", repeat:-1 });
+  }
+
+  /* ---------- FAQ accordion ---------- */
+  function initFaq(){
+    document.querySelectorAll(".faq-item").forEach(item=>{
+      const q = item.querySelector(".faq-q");
+      const a = item.querySelector(".faq-a");
+      q.addEventListener("click", ()=>{
+        const open = item.classList.contains("open");
+        // Close others for a tidy, focused reading experience
+        document.querySelectorAll(".faq-item.open").forEach(o=>{
+          if(o!==item){ o.classList.remove("open");
+            hasGSAP && !reduceMotion ? gsap.to(o.querySelector(".faq-a"), {height:0,duration:.45,ease:"power3.inOut"}) : o.querySelector(".faq-a").style.height=0;
+          }
+        });
+        item.classList.toggle("open", !open);
+        if(hasGSAP && !reduceMotion){
+          gsap.to(a, { height: open ? 0 : a.scrollHeight, duration:.5, ease:"power3.inOut",
+            onComplete(){ if(!open) a.style.height = "auto"; ScrollTrigger.refresh(); } });
+        } else {
+          a.style.height = open ? 0 : "auto";
+        }
+      });
+    });
+  }
+
+  // Keep triggers accurate after fonts/images settle
+  window.addEventListener("load", ()=> ScrollTrigger.refresh());
+})();
+</script>
+</body>
+</html>
