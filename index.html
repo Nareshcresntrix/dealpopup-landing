@@ -352,11 +352,19 @@ h3{font-size:17px;font-weight:700;letter-spacing:-0.01em}
   display:inline-block;background:var(--green);color:#fff;border-radius:999px;
   font-size:10.5px;font-weight:600;padding:6px 14px;
 }
+.catalog-demo{justify-content:flex-start}
+.catalog-demo .cat-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:12px;
+}
+.catalog-demo .cat-title{
+  font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+}
 .catalog-demo .pagebar{height:10px;border-radius:6px;background:#E4E9E4;margin:5px 0;position:relative;overflow:hidden}
 .catalog-demo .pagebar.w1{width:88%}.catalog-demo .pagebar.w2{width:70%}.catalog-demo .pagebar.w3{width:80%}
 .catalog-demo .thisweek{
-  position:absolute;top:16px;right:16px;z-index:2;background:var(--red);color:#fff;
-  font-size:9px;font-weight:700;border-radius:999px;padding:4px 9px;white-space:nowrap;
+  flex-shrink:0;background:var(--red);color:#fff;
+  font-size:9px;font-weight:700;letter-spacing:.02em;border-radius:999px;padding:4px 10px;white-space:nowrap;
   box-shadow:0 2px 6px rgba(229,72,77,.3);
 }
 .emirate-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
@@ -982,7 +990,10 @@ h3{font-size:17px;font-weight:700;letter-spacing:-0.01em}
           <p>Upload the same flyer you already print. Shoppers flip through it page by page, and every page view is counted.</p>
         </div>
         <div class="demo catalog-demo">
-          <span class="thisweek">This week</span>
+          <div class="cat-head">
+            <span class="cat-title">Weekly flyer</span>
+            <span class="thisweek">This week</span>
+          </div>
           <div class="pagebar w1"></div>
           <div class="pagebar w2"></div>
           <div class="pagebar w3"></div>
