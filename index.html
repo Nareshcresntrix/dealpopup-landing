@@ -1364,9 +1364,21 @@ body.menu-open{overflow:hidden}
      positions and scroll on the next frames — otherwise the still-open drawer
      (body overflow:hidden) leaves stale measurements and the target lands on a blank
      area whose reveal animations never fired (the "white screen" bug). */
+  /* Guarantee a section's reveal animations are shown, so jumping to it can never
+     land on opacity:0 content (the white screen). Scroll-scrubbed / pinned effects
+     are left alone — only the play-on-enter reveals are snapped to their end state. */
+  function ensureRevealed(target){
+    if(typeof ScrollTrigger === "undefined" || !target) return;
+    ScrollTrigger.getAll().forEach(st=>{
+      if(st.scrub) return;                                  // don't touch scrubbed/pinned timelines
+      const trg = st.trigger;
+      if(trg && target.contains(trg) && st.animation) st.animation.progress(1);
+    });
+  }
   function scrollToSection(id){
     const target = (id && id.length > 1) ? document.querySelector(id) : null;
     if(!target) return;
+    ensureRevealed(target);                                 // content is visible before we even arrive
     if(smoother){
       smoother.scrollTo(target, !reduceMotion, "top 70px");
     } else {
