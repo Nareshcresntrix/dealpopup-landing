@@ -812,6 +812,9 @@ body.menu-open{overflow:hidden}
   .cta-band{grid-template-columns:1fr;padding:48px 36px}
   .nav{display:none}
   .nav-toggle{display:flex}
+  /* Single-column now: cap & centre the phone stage so the two mockups keep their
+     designed overlap instead of flinging to the container edges (the broken 641–1024px zone). */
+  .phones{max-width:480px;margin-left:auto;margin-right:auto}
 }
 @media(max-width:640px){
   .container{padding:0 20px}
